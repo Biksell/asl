@@ -1,5 +1,5 @@
 /*
-Made by Biksel, using asl-help from ero
+Made by Biksel, thanks to ero for making asl-help and helping me out on Discord ^^
 Gamestates: 0 = Setup
             1 = Start
             2 = Game
@@ -12,6 +12,10 @@ state("Raw Nerve"){}
 
 startup{
     Assembly.Load(File.ReadAllBytes("Components/asl-help")).CreateInstance("Unity");
+
+    settings.Add("info", true, "Raw Nerve Autosplitter v1.0 by Biksel");
+    settings.Add("split_end", true, "Split on game end");
+    settings.Add("split_collectible", false, "Split on every collectible");
 
     if (timer.CurrentTimingMethod == TimingMethod.RealTime)
 	{
@@ -28,10 +32,15 @@ startup{
 
 init {
     vars.Helper.TryLoad = (Func<dynamic, bool>)(mono => {
+        var col = mono.GetClass("Collectibles");
+
         vars.Helper["igt"] = mono.Make<float>("GameManager", 1, "instance", "GameTime");
         vars.Helper["activeGameState"] = mono.Make<int>("GameManager", 1, "instance", "ActiveState");
+        vars.Helper["collectibles"] = mono.MakeArray<bool>("GameManager", 1, "instance", "Collectible");
         return true;
     });
+
+    vars.collectedCollectibles = new List<int>();
 }
 
 gameTime{
@@ -43,7 +52,17 @@ start {
 }
 
 split {
-    return current.activeGameState == 4 && old.activeGameState == 2;
+    if(settings["split_end"]) {
+        if(settings["split_collectible"]) {
+            for(int i = 0; i < current.collectibles.Length; i++) {
+                if(old.collectibles[i] != current.collectibles[i] && !vars.collectedCollectibles.Contains(i)) {
+                    vars.collectedCollectibles.Add(i);
+                    return true;
+                }
+            }
+        }
+        return current.activeGameState == 4 && old.activeGameState == 2;
+    }
 }
 
 reset {
