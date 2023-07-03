@@ -12,6 +12,8 @@ startup {
 
     vars.Helper.LoadSceneManager = true;
     vars.Helper.AlertGameTime();
+
+    refreshRate = 15;
 }
 
 init {
@@ -41,7 +43,7 @@ update {
 }
 
 gameTime {
-    if (old.igt > current.igt)
+    if (old.igt > current.igt && !vars.Levels.Contains(current.activeScene))
         vars.totalIGT += old.igt;
     return vars.totalIGT + current.igt;
 }
