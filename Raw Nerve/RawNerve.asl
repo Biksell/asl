@@ -63,3 +63,7 @@ split {
 reset {
     return (old.activeGameState == 3 || old.activeGameState == 4) && current.activeGameState == 2 && current.igt == 0f;
 }
+
+isLoading {
+    return true;
+}
