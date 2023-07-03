@@ -1,3 +1,6 @@
+// Reminder; Game has better IGT access as well, but the UI time is used for easier verification
+// Made by Biksel, credits to Ero for making asl-help
+// v1.1
 state("SG3D_Windows_64_SteamVersion_Demo") {}
 
 startup {
@@ -13,8 +16,10 @@ startup {
 
 init {
     vars.Helper.TryLoad = (Func<dynamic, bool>)(mono => {
-        vars.Helper["igt"] = mono.Make<float>("GameManager", 1, "m_Instance", "_curTime");
         vars.Helper["paused"] = mono.Make<bool>("UIManager", 1, "m_Instance", "_paused");
+        vars.Helper["minutes"] = mono.Make<int>("UIManager", 1, "m_Instance", "_minutes");
+        vars.Helper["seconds"] = mono.Make<int>("UIManager", 1, "m_Instance", "_seconds");
+        vars.Helper["milliSeconds"] = mono.Make<int>("UIManager", 1, "m_Instance", "_milliseconds");
         return true;
     });
 }
@@ -25,7 +30,7 @@ onStart {
 }
 
 update {
-    float deltaTime = current.igt - old.igt;
+    float deltaTime = (current.minutes * 60f + current.seconds * 1f + current.milliSeconds / 100f) - (old.minutes * 60f + old.seconds * 1f + old.milliSeconds / 100f);
     if (deltaTime > 0f && deltaTime < 1f) {
         vars.totalIGT += deltaTime;
     }
@@ -38,6 +43,10 @@ gameTime{
     return TimeSpan.FromSeconds(vars.totalIGT);
 }
 
+isLoading {
+    return true;
+}
+
 start {
     return (current.activeScene == "MainMenu" && current.loadingScene == "LoadingSceneEmpty") || // Continue
             (vars.completedLevels.Count == 0 && current.activeScene == "LoadingSceneEmpty" && current.loadingScene == "CutsceneScene"); // New Game
@@ -45,7 +54,10 @@ start {
 
 split {
     // Doesn't currently split at the end, couldn't find a condition that would fit it
-    return vars.Levels.Contains(current.activeScene) && current.loadingScene == "LoadingSceneEmpty" && vars.completedLevels.Add(current.activeScene) && !current.paused;
+    if (vars.Levels.Contains(current.activeScene) && current.loadingScene == "LoadingSceneEmpty" && vars.completedLevels.Add(current.activeScene) && !current.paused) {
+        return true;
+    }
+
 }
 
 reset {
