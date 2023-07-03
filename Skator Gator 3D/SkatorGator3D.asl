@@ -1,5 +1,5 @@
 // Reminder; Game has better IGT access as well, but the UI time is used for easier verification
-// Made by Biksel, credits to Ero for making asl-help
+// Made by Biksel, credits to Ero for making asl-help and for helping witha more accurate total IGT calculation
 // v1.1
 state("SG3D_Windows_64_SteamVersion_Demo") {}
 
@@ -8,7 +8,7 @@ startup {
 
     vars.completedLevels = new HashSet<String>();
     vars.Levels = new List<string>() {"Level_01_Intro", "Level_03_Day", "Level_05_Sunset", "Level_08"};
-    vars.totalIGT = 0f;
+    vars.totalIGT = new TimeSpan();
 
     vars.Helper.LoadSceneManager = true;
     vars.Helper.AlertGameTime();
@@ -26,21 +26,24 @@ init {
 
 onStart {
     vars.completedLevels.Clear();
-    vars.totalIGT = 0f;
+    vars.totalIGT = TimeSpan.Zero;
+    current.igt = TimeSpan.Zero;
 }
 
 update {
-    float deltaTime = (current.minutes * 60f + current.seconds * 1f + current.milliSeconds / 100f) - (old.minutes * 60f + old.seconds * 1f + old.milliSeconds / 100f);
-    if (deltaTime > 0f && deltaTime < 1f) {
-        vars.totalIGT += deltaTime;
-    }
-
     current.activeScene = vars.Helper.Scenes.Active.Name ?? current.activeScene;
 	current.loadingScene = vars.Helper.Scenes.Loaded[0].Name ?? current.loadingScene;
+
+    if(vars.Levels.Contains(current.activeScene))
+        current.igt = new TimeSpan(0, 0, current.minutes, current.seconds, current.milliSeconds * 10);
+    else
+        current.igt = TimeSpan.Zero;
 }
 
-gameTime{
-    return TimeSpan.FromSeconds(vars.totalIGT);
+gameTime {
+    if (old.igt > current.igt)
+        vars.totalIGT += old.igt;
+    return vars.totalIGT + current.igt;
 }
 
 isLoading {
