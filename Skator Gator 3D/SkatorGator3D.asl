@@ -12,8 +12,6 @@ startup {
 
     vars.Helper.LoadSceneManager = true;
     vars.Helper.AlertGameTime();
-
-    refreshRate = 15;
 }
 
 init {
