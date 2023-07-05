@@ -1,4 +1,4 @@
-# Raw Nerve Autosplitter v1.0
+# Raw Nerve Autosplitter
 Supports: 
 - In-game time
 - Starting and resetting on "Retry"
