@@ -14,7 +14,7 @@ startup {
     Assembly.Load(File.ReadAllBytes("Components/asl-help")).CreateInstance("Unity");
     vars.Helper.GameName = "Raw Nerve";
 
-    vars.Areas = new List<string>() {"Base", "Summit", "Guts", "Marsh"};
+    vars.Areas = new List<string>() {"Base", "Guts", "Marsh", "Summit"};
 
     settings.Add("start", true, "Start on loading to Cave");
     settings.Add("split", true, "Choose where to split: ");
