@@ -8,6 +8,10 @@ startup {
     vars.csCount = 0;
     refreshRate = 60;
 
+    settings.Add("start", true, "Start after first loading screen on level1");
+    settings.Add("split_level", true, "Split on level end (after cutscene)");
+    settings.Add("split_end", true, "Split on level10 cutscene start");
+
     if (timer.CurrentTimingMethod == TimingMethod.RealTime) {
         var timingMessage = MessageBox.Show (
             "This game uses Time without Loads (Game Time) as the main timing method.\n"+
@@ -38,13 +42,13 @@ isLoading {
 }
 
 start {
-    return current.levelId == 0 && old.loading && current.inCutScene;
+    return settings["start"] && current.levelId == 0 && old.loading && current.inCutScene;
 }
 
 split {
-    if (current.levelId == 9 && vars.csCount == 3) { // Final split
+    if (settings["split_end"] && current.levelId == 9 && vars.csCount == 3) { // Final split
         vars.csCount++;
         return true;
     }
-    return old.inCutScene && current.loading; // Levels 1-9
+    return settings["split_level"] && old.inCutScene && current.loading; // Levels 1-9
 }
