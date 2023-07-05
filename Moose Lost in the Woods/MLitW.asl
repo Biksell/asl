@@ -1,7 +1,8 @@
 // Couldn't find a static entry point, so doesn't work
 
 state("Moose Lost in the Woods") {
-    bool canMove : "mono-2.0-bdwgc.dll", 0x728098, 0x490, 0x120, 0x6BC;
+    //bool canMove : "mono-2.0-bdwgc.dll", 0x728098, 0x490, 0x120, 0x6BC;
+    bool canMove : "mono-2.0-bdwgc.dll", 0x7280F8, 0x88, 0xE78, 0x10, 0x17C;
     int talkingToNPC : "mono-2.0-bdwgc.dll", 0x7280F8, 0xA0, 0x798, 0x74;
 }
 
@@ -27,6 +28,7 @@ init {
 update {
     current.activeScene = vars.Helper.Scenes.Active.Name ?? current.activeScene;
 	current.loadingScene = vars.Helper.Scenes.Loaded[0].Name ?? current.loadingScene;
+    print(current.talkingToNPC.ToString());
     //print(current.test.ToString());
 }
 
