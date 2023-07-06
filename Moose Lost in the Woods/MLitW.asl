@@ -11,26 +11,17 @@ startup {
 
     settings.Add("start", true, "Start on New Game");
     settings.Add("split_level", true, "Split on level change");
-    settings.Add("split_end", true, "Split on losing control of player");
+    settings.Add("split_end", true, "Split ending (!!ONLY WORKS IN ANY% AND NO MAJOR SKIPS!!)");
     settings.Add("reset", true, "Reset on Main Menu");
 
     vars.Helper.LoadSceneManager = true;
-    vars.splitWatch = new Stopwatch();  // Handles end split delay
-    vars.startWatch = new Stopwatch();  // Makes sure timer doesn't start on Rockland when talking to an NPC
+    vars.splitDelay = new Stopwatch();  // Handles end split delay
+    vars.talkDelay = new Stopwatch();  // Makes sure timer doesn't start on Rockland when talking to an NPC
     vars.hasStarted = false;
-
-}
-
-init {
-    vars.Helper.TryLoad = (Func<dynamic, bool>)(mono => {
-        vars.Helper["test"] = mono.Make<int>("SCR_PlayerInputManager", "Instance", 0x18, 0x10);
-
-        return true;
-    });
 }
 
 onReset {
-    vars.splitWatch.Reset();
+    vars.splitDelay.Reset();
     vars.hasStarted = false;
 }
 
@@ -42,37 +33,31 @@ update {
     current.activeScene = vars.Helper.Scenes.Active.Name ?? current.activeScene;
 	current.loadingScene = vars.Helper.Scenes.Loaded[0].Name ?? current.loadingScene;
 
-    if (vars.startWatch.ElapsedMilliseconds > 200) vars.startWatch.Reset();
+    if (vars.talkDelay.ElapsedMilliseconds > 200) vars.talkDelay.Reset();
 
     if (!vars.hasStarted && old.talkingToNPC == 1 && current.talkingToNPC == 5) {
-        vars.startWatch.Start();
+        vars.talkDelay.Start();
     }
-
-    print(vars.startWatch.ElapsedMilliseconds.ToString());
-}
-
-isLoading {
-    //return current.activeScene != current.loadingScene;
 }
 
 start {
     // Old method
     //return old.activeScene == "MainMenu" && current.activeScene == "Rockland" && settings["start"];
     return !old.canMove && current.canMove && current.activeScene == "Rockland" && settings["start"] &&
-            old.talkingToNPC == 5 && !old.paused && old.inventoryOpen == 0 && vars.startWatch.ElapsedMilliseconds == 0;
+            old.talkingToNPC == 5 && !old.paused && old.inventoryOpen == 0 && vars.talkDelay.ElapsedMilliseconds == 0;
 }
 
 split {
     // End split fade out time
-    if (vars.splitWatch.ElapsedMilliseconds >= 1116) {
-        vars.splitWatch.Stop();
+    if (vars.splitDelay.ElapsedMilliseconds >= 1133) {
+        vars.splitDelay.Reset();
         return true;
     }
 
     // End split, start delay
     if (!current.canMove && old.canMove && current.activeScene == "Deepwoods" && current.talkingToNPC == 5
         && current.inventoryOpen == 0 && !current.paused && settings["split_end"]) {
-        vars.splitWatch.Start();
+        vars.splitDelay.Start();
     }
 
     // All other splits
