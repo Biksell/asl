@@ -15,7 +15,10 @@ startup {
     settings.Add("reset", true, "Reset on Main Menu");
 
     vars.Helper.LoadSceneManager = true;
-    vars.watch = new Stopwatch();
+    vars.splitWatch = new Stopwatch();  // Handles end split delay
+    vars.startWatch = new Stopwatch();  // Makes sure timer doesn't start on Rockland when talking to an NPC
+    vars.hasStarted = false;
+
 }
 
 init {
@@ -26,13 +29,26 @@ init {
     });
 }
 
+onReset {
+    vars.splitWatch.Reset();
+    vars.hasStarted = false;
+}
+
 onStart {
-    vars.watch.Reset();
+    vars.hasStarted = true;
 }
 
 update {
     current.activeScene = vars.Helper.Scenes.Active.Name ?? current.activeScene;
 	current.loadingScene = vars.Helper.Scenes.Loaded[0].Name ?? current.loadingScene;
+
+    if (vars.startWatch.ElapsedMilliseconds > 200) vars.startWatch.Reset();
+
+    if (!vars.hasStarted && old.talkingToNPC == 1 && current.talkingToNPC == 5) {
+        vars.startWatch.Start();
+    }
+
+    print(vars.startWatch.ElapsedMilliseconds.ToString());
 }
 
 isLoading {
@@ -42,20 +58,21 @@ isLoading {
 start {
     // Old method
     //return old.activeScene == "MainMenu" && current.activeScene == "Rockland" && settings["start"];
-    return !old.canMove && current.talkingToNPC == 5 && current.canMove && current.activeScene == "Rockland" && settings["start"];
+    return !old.canMove && current.canMove && current.activeScene == "Rockland" && settings["start"] &&
+            old.talkingToNPC == 5 && !old.paused && old.inventoryOpen == 0 && vars.startWatch.ElapsedMilliseconds == 0;
 }
 
 split {
     // End split fade out time
-    if (vars.watch.ElapsedMilliseconds >= 1116) {
-        vars.watch.Stop();
+    if (vars.splitWatch.ElapsedMilliseconds >= 1116) {
+        vars.splitWatch.Stop();
         return true;
     }
 
     // End split, start delay
     if (!current.canMove && old.canMove && current.activeScene == "Deepwoods" && current.talkingToNPC == 5
         && current.inventoryOpen == 0 && !current.paused && settings["split_end"]) {
-        vars.watch.Start();
+        vars.splitWatch.Start();
     }
 
     // All other splits
