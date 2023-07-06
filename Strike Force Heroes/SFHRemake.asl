@@ -77,26 +77,27 @@ init {
 onReset {
     vars.hasStarted = false;
     vars.inputChanges = 0;
-    vars.canReset = false;
 }
 
 onStart {
     print("Timer started!");
     vars.hasStarted = true;
     vars.canReset = false;
+    vars.latestMap = "";
 }
 
 update {
     current.activeScene = vars.Helper.Scenes.Active.Name ?? "noScene";
 	current.loadingScene = vars.Helper.Scenes.Loaded[0].Name ?? "noScene";
 
-    if (current.activeScene != "noScene" && vars.latestMap != current.activeScene) vars.latestMap = current.activeScene;
+    if (current.activeScene != "noScene" && current.activeScene != "CutsceneMov" && vars.latestMap != current.activeScene) vars.latestMap = current.activeScene;
 
     if (!vars.hasStarted && old.inputID != current.inputID && old.inputID != 0 && current.inputID != 0) vars.inputChanges++;
 
     // Debug
     if (old.activeScene != current.activeScene) print(old.activeScene + " -> " + current.activeScene);
     if (old.mission != current.mission) print(old.mission + " -> " + current.mission);
+    print(vars.latestMap);
 }
 
 start {
@@ -112,7 +113,7 @@ split {
 
     // End split
     if (settings["end_" + current.mission] && settings["demo_end"] && old.activeScene != "CutsceneMov" && current.activeScene == "CutsceneMov")  {
-        if (vars.demoExtraMissions.ContainsKey(current.mission)) return vars.demoExtraMissions[current.mission].Item1;
-        else return vars.demoMissions[current.mission].Value;
+        if (vars.demoExtraMissions.ContainsKey(current.mission)) return vars.demoExtraMissions[current.mission].Item1 == vars.latestMap;
+        else return vars.demoMissions[current.mission] == vars.latestMap;
     }
 }
