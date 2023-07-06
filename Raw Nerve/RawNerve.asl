@@ -74,7 +74,8 @@ split {
     if (current.area == "Cave") return false;
 
     foreach (string area in vars.Areas) {
-        return settings["split_" + current.area] && vars.splitLevels.Add(current.area);
+        if (settings["split_" + current.area] && vars.splitLevels.Add(current.area)) return true;
+        continue;
     }
 }
 
