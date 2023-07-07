@@ -1,5 +1,4 @@
-state("Strike Force Heroes Demo") {}
-
+// Credits to Ero for making asl-help! https://github.com/just-ero/asl-help/raw/main/lib/asl-help
 /*
 (if needed in the future)
 PlayModes:
@@ -10,6 +9,8 @@ PlayModes:
 4: Online
 5: Test
 */
+
+state("Strike Force Heroes Demo") {}
 
 startup {
     Assembly.Load(File.ReadAllBytes("Components/asl-help")).CreateInstance("Unity");
