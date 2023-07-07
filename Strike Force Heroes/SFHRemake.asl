@@ -1,10 +1,7 @@
 state("Strike Force Heroes Demo") {}
 
 /*
-Missions:
-Under Siege
-Rebellion
-
+(if needed in the future)
 PlayModes:
 0: Campaign
 1: Challenge
@@ -37,7 +34,6 @@ startup {
     };
 
     settings.Add("start", true, "Start on \"Press Any Button\"");
-    //settings.Add("reset", false, "Reset on game close");
     settings.Add("demo_any%", true, "Any% (Demo) splits: ");
     settings.Add("demo_100%", false, "100% (Demo) splits: ");
     settings.Add("demo_end", true, "End run on:     (split at cutscene start)");
@@ -68,7 +64,6 @@ init {
         vars.Helper["playMode"] = mono.Make<int>("GI", "GlobalVars", "CurPlayMode");
         vars.Helper["inputID"] = mono.Make<int>("GI", "ControlHandler", "Actions", "m_AnyInput", "m_Id");
         vars.Helper["inputName"] = mono.Make<int>("GI", "ControlHandler", "Actions", "m_AnyInput", "m_Name");
-        //vars.Helper["menu"] =
 
         return true;
     });
@@ -80,7 +75,6 @@ onReset {
 }
 
 onStart {
-    print("Timer started!");
     vars.hasStarted = true;
     vars.canReset = false;
     vars.latestMap = "";
@@ -90,14 +84,15 @@ update {
     current.activeScene = vars.Helper.Scenes.Active.Name ?? "noScene";
 	current.loadingScene = vars.Helper.Scenes.Loaded[0].Name ?? "noScene";
 
+    //Set the latestMap
     if (current.activeScene != "noScene" && current.activeScene != "CutsceneMov" && vars.latestMap != current.activeScene) vars.latestMap = current.activeScene;
 
+    // Add +1 on input change (so we can start at 2)
     if (!vars.hasStarted && old.inputID != current.inputID && old.inputID != 0 && current.inputID != 0) vars.inputChanges++;
 
     // Debug
-    if (old.activeScene != current.activeScene) print(old.activeScene + " -> " + current.activeScene);
-    if (old.mission != current.mission) print(old.mission + " -> " + current.mission);
-    print(vars.latestMap);
+    //if (old.activeScene != current.activeScene) print(old.activeScene + " -> " + current.activeScene);
+    //if (old.mission != current.mission) print(old.mission + " -> " + current.mission);
 }
 
 start {
