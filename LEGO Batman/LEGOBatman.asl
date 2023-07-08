@@ -17,7 +17,7 @@ startup {
     vars.level = 1;
 
     settings.Add("split_continue", false, "Split at \"Continue Story\" or \"Return to hub\"");
-    settings.Add("1_1_0studs", true, "Going for 0 studs in 1-1 Story", "split_continue");
+    settings.Add("1_1_0studs", false, "Going for 0 studs in 1-1 Story", "split_continue");
     settings.Add("split_status", false, "Split at the beginning of status screens");
 }
 
