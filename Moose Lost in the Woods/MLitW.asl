@@ -1,5 +1,5 @@
+// Credits to Ero for making asl-help
 state("Moose Lost in the Woods") {
-    //bool canMove : "mono-2.0-bdwgc.dll", 0x728098, 0x490, 0x120, 0x6BC;
     bool canMove : "mono-2.0-bdwgc.dll", 0x7280F8, 0x88, 0xE78, 0x10, 0x17C;
     bool paused : "mono-2.0-bdwgc.dll", 0x7280F8, 0x88, 0xCE0, 0xB0, 0xB0;
     int talkingToNPC : "mono-2.0-bdwgc.dll", 0x7280F8, 0xA0, 0x798, 0x74;           //5 = false, 1 = true
