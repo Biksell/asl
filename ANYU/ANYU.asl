@@ -6,8 +6,12 @@ startup {
     vars.lastLevel = -1;
 }
 
+onStart {
+    vars.lastLevel = old.levelId;
+}
+
 start {
-    return (vars.lastLevel == 16 || vars.lastLevel == 11648) && current.levelId == 52256;
+    return (vars.lastLevel == 16 || vars.lastLevel == 11648 || vars.lastLevel == -1) && current.levelId == 52256;
 }
 
 update {
