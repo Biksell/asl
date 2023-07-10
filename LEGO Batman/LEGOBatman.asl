@@ -19,6 +19,20 @@ startup {
     settings.Add("split_continue", false, "Split at \"Continue Story\" or \"Return to hub\"");
     settings.Add("1_1_0studs", false, "Going for 0 studs in 1-1 Story", "split_continue");
     settings.Add("split_status", false, "Split at the beginning of status screens");
+
+    if (timer.CurrentTimingMethod == TimingMethod.RealTime) {
+        var timingMessage = MessageBox.Show (
+            "This game uses Time without Loads (Game Time) as the main timing method.\n"+
+            "LiveSplit is currently set to show Real Time (RTA).\n"+
+            "Would you like to set the timing method to Game Time?",
+            "LiveSplit | LEGO Batman",
+            MessageBoxButtons.YesNo,MessageBoxIcon.Question
+        );
+
+        if (timingMessage == DialogResult.Yes) {
+            timer.CurrentTimingMethod = TimingMethod.GameTime;
+        }
+    }
 }
 
 onStart {
