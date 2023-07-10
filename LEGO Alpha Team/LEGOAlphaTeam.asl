@@ -56,17 +56,17 @@ startup {
         {Tuple.Create("Rescue Flex!", 465, 33)},
         //{Tuple.Create("Tutorial #4", 333, 16)},
         {Tuple.Create("Tug Team", 410, 33)},
-        {Tuple.Create("Drop into Danger", 424, 32)},
-        {Tuple.Create("Computer Hop", 493, 41)},
-        {Tuple.Create("Dash's Decoy", 399, 40)},
-        {Tuple.Create("The D.O.O.M. Room", 500, 48)},
-        {Tuple.Create("Arctic Dash", 430, 40)},
-        {Tuple.Create("Crunch Punch", 451, 52)},
-        {Tuple.Create("Rely on Radia", 526, 50)},
-        {Tuple.Create("Charge in Charge", 449, 44)},
-        {Tuple.Create("Cam's Challenge", 442, 47)},
-        {Tuple.Create("Featuring Flex", 412, 34)},
-        {Tuple.Create("Mission Control", 563, 48)}
+        {Tuple.Create("Drop into Danger", 424, 31)},
+        {Tuple.Create("Computer Hop", 493, 39)},
+        {Tuple.Create("Dash's Decoy", 385, 36)},
+        {Tuple.Create("The D.O.O.M. Room", 486, 38)},
+        {Tuple.Create("Arctic Dash", 416, 30)},
+        {Tuple.Create("Crunch Punch", 437, 42)},
+        {Tuple.Create("Rely on Radia", 512, 40)},
+        {Tuple.Create("Charge in Charge", 435, 34)},
+        {Tuple.Create("Cam's Challenge", 428, 37)},
+        {Tuple.Create("Featuring Flex", 398, 24)},
+        {Tuple.Create("Mission Control", 549, 38)}
     };
 
     settings.Add("split", true, "Split after: ");
