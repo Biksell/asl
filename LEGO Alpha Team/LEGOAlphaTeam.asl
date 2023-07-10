@@ -3,10 +3,15 @@ state ("LEGOATeamAltTab") {
     int id2 : "BehaviorComp.dll", 0x8598;
 }
 
+state ("LEGOATeam") {
+    int id1 : "DDPackedDirFileLib.dll", 0xF19C;
+    int id2 : "BehaviorComp.dll", 0x8598;
+}
+
 startup {
     // <levelName, <id1, id2>>
     vars.Levels = new List<Tuple<string, int, int>> {
-        {Tuple.Create("Main Menu", 265, 11)},
+        //{Tuple.Create("Main Menu", 265, 11)},
         //{Tuple.Create("Tutorial #1", 307, 18)},
         {Tuple.Create("Mission One", 350, 19)},
         {Tuple.Create("On the Right Path", 310, 18)},
