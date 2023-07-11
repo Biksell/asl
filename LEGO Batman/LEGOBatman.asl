@@ -12,6 +12,17 @@ state("LEGOBatman")
     bool status: 0x696BA8; // Statu screen enabled
 }
 
+state("Game")
+{
+    bool loading: 0x5C999C; // Yellow shield at the bottom of screen, character info screens
+    bool loading2: 0x696D2C; // Character info screens
+    bool loading3: 0x6CA7B0; // Could be used for autostarting
+    bool loading4: 0x6B29D0;
+
+    bool uiElementChange : 0x6D0270; // "Stud counter & Continue story" enabled, we want to split on 1 -> 0
+    bool status: 0x696BA8; // Statu screen enabled
+}
+
 startup {
     vars.changeCount = 0;
     vars.level = 1;
