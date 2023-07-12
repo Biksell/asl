@@ -29,7 +29,7 @@ startup {
     vars.changeCount = 0;
     vars.level = 1;
 
-    settings.Add("split_continue", false, "Split at \"Continue Story\" or \"Return to hub\"");
+    settings.Add("split_continue", false, "Split at \"Continue Story\" or \"Return to hub\" in the status screen");
     settings.Add("1_1_0studs", false, "Going for 0 studs in 1-1 Story OR playing Freeplay", "split_continue"); // if true, split when changeCount == 1, if false, split when changeCount == 2
     settings.Add("split_status", false, "Split at the beginning of status screens");
 
