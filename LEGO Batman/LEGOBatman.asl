@@ -12,6 +12,7 @@ state("LEGOBatman")
     bool status: 0x696BA8; // Statu screen enabled
 }
 
+
 state("Game")
 {
     bool loading: 0x5C999C; // Yellow shield at the bottom of screen, character info screens
@@ -23,12 +24,13 @@ state("Game")
     bool status: 0x696BA8; // Statu screen enabled
 }
 
+
 startup {
     vars.changeCount = 0;
     vars.level = 1;
 
     settings.Add("split_continue", false, "Split at \"Continue Story\" or \"Return to hub\"");
-    settings.Add("1_1_0studs", false, "Going for 0 studs in 1-1 Story", "split_continue");
+    settings.Add("1_1_0studs", false, "Going for 0 studs in 1-1 Story OR playing Freeplay", "split_continue"); // if true, split when changeCount == 1, if false, split when changeCount == 2
     settings.Add("split_status", false, "Split at the beginning of status screens");
 
     if (timer.CurrentTimingMethod == TimingMethod.RealTime) {
@@ -55,8 +57,9 @@ update {
     if (old.uiElementChange && !current.uiElementChange) {
         print(vars.changeCount + " -> " + vars.changeCount++);
     }
-
-    if (old.uiElementChange != current.uiElementChange) print(vars.changeCount.ToString());
+    print(vars.changeCount.ToString());
+    //if (old.uiElementChange != current.uiElementChange) print(vars.changeCount.ToString());
+    //print((settings["split_continue"] && !settings["1_1_0studs"] && vars.level == 1 && vars.changeCount >= 1).ToString());
 }
 
 isLoading {
@@ -65,8 +68,8 @@ isLoading {
 
 split {
     if (settings["split_status"] && current.status && !old.status) return true;
-    if (settings["split_continue"] && !settings["1_1_0studs"] && vars.level == 1) {
-        if (vars.changeCount == 1) return false;
+    if (settings["split_continue"] && !settings["1_1_0studs"] && vars.level == 1 && vars.changeCount >= 1) {
+        if (vars.changeCount == 1 && !settings["1_1_0studs"]) return false;
         vars.changeCount = 0;
         vars.level++;
         return true;
@@ -76,6 +79,7 @@ split {
         vars.changeCount = 0;
         return true;
     }
+    return false;
 }
 
 exit {
