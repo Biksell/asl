@@ -1,5 +1,5 @@
 /*
-
+Stairway to Heaven's Gate autosplitter by Biksel
 */
 
 state("Stairway-Win64-Shipping") {
@@ -9,6 +9,20 @@ state("Stairway-Win64-Shipping") {
 
 startup {
     vars.totalIGT = new TimeSpan();
+
+    if (timer.CurrentTimingMethod == TimingMethod.RealTime) {
+        var timingMessage = MessageBox.Show (
+            "This game supports In Game Time (IGT).\n"+
+            "LiveSplit is currently set to show Real Time (RTA).\n"+
+            "Would you like to set the timing method to Game Time?",
+            "LiveSplit | Stairway to Heaven's Gate",
+            MessageBoxButtons.YesNo,MessageBoxIcon.Question
+        );
+
+        if (timingMessage == DialogResult.Yes) {
+            timer.CurrentTimingMethod = TimingMethod.GameTime;
+        }
+    }
 }
 
 onStart {
@@ -24,10 +38,6 @@ gameTime {
 
 start {
     return current.igt > 0f && !current.mainMenu && old.igt < 0.1f;
-}
-
-update {
-
 }
 
 split {
