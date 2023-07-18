@@ -18,6 +18,7 @@ state("LEGOBatman")
     bool start5 : 0x702A50;
     bool start6 : 0x702A68;
 
+    bool inLevel : 0x5616DD;
 }
 
 
@@ -30,6 +31,13 @@ state("Game")
 
     bool uiElementChange : 0x6D0270; // "Stud counter & Continue story" enabled, we want to split on 1 -> 0
     bool status: 0x696BA8; // Statu screen enabled
+
+    bool start1 : 0x693034;
+    bool start2 : 0x693674;
+    bool start3 : 0x693684;
+    bool start4 : 0x6DE6FC;
+    bool start5 : 0x702A50;
+    bool start6 : 0x702A68;
 }
 
 
@@ -37,7 +45,8 @@ startup {
     vars.changeCount = 0;
     vars.level = 1;
 
-    settings.Add("start", false, "(EXPERIMENTAL) Start on New Game (Add 0.583 offset to your timer)");
+    //settings.Add("freeplay", true, "Start on loading into level (Free Play)");
+    settings.Add("start_story", false, "(EXPERIMENTAL) Start on New Game (Add 0.583 offset to your timer)");
     settings.Add("split_continue", false, "Split at \"Continue Story\" or \"Return to hub\" in the status screen");
     settings.Add("1_1_0studs", false, "Going for 0 studs in 1-1 Story OR playing Freeplay", "split_continue"); // if true, split when changeCount == 1, if false, split when changeCount == 2
     settings.Add("split_status", false, "Split at the beginning of status screens");
@@ -55,18 +64,24 @@ startup {
             timer.CurrentTimingMethod = TimingMethod.GameTime;
         }
     }
+
+    //vars.startDelay = new Stopwatch();
 }
 
 onStart {
     vars.changeCount = 0;
     vars.level = 1;
+    //vars.startDelay.Reset();
 }
 
 update {
     if (old.uiElementChange && !current.uiElementChange) {
         print(vars.changeCount + " -> " + vars.changeCount++);
     }
-    print(current.start1 + "," + current.start2 + "," + current.start3 + "," + current.start4 + "," + current.start5 + "," + current.start6);
+    //if (settings["freeplay"] && old.loading2 && !current.loading2) vars.startDelay.Start();
+    //if (vars.startDelay.ElapsedMilliseconds > 100) vars.startDelay.Reset();
+    //print(current.inLevel + ", " + current.loading2);
+    //print(current.start1 + "," + current.start2 + "," + current.start3 + "," + current.start4 + "," + current.start5 + "," + current.start6);
     //if (old.uiElementChange != current.uiElementChange) print(vars.changeCount.ToString());
     //print((settings["split_continue"] && !settings["1_1_0studs"] && vars.level == 1 && vars.changeCount >= 1).ToString());
 }
@@ -76,12 +91,12 @@ isLoading {
 }
 
 start {
-    return current.start1 &&
+    return (current.start1 &&
             current.start2 &&
             current.start3 &&
             current.start4 &&
             current.start5 &&
-            current.start6 && settings["start"];
+            current.start6 && settings["start_story"]);
 }
 
 split {

@@ -12,6 +12,9 @@ startup {
 
     vars.Helper.LoadSceneManager = true;
     vars.Helper.AlertGameTime();
+    vars.pauseTimer = new Stopwatch();
+    vars.totalPause = new TimeSpan();
+
 }
 
 init {
@@ -28,6 +31,8 @@ onStart {
     vars.completedLevels.Clear();
     vars.totalIGT = TimeSpan.Zero;
     current.igt = TimeSpan.Zero;
+    vars.pauseTimer.Reset();
+    vars.totalPause = TimeSpan.Zero;
 }
 
 update {
@@ -38,12 +43,17 @@ update {
         current.igt = new TimeSpan(0, 0, current.minutes, current.seconds, current.milliSeconds * 10);
     else
         current.igt = TimeSpan.Zero;
+
+    current.pauseTime = TimeSpan.FromMilliseconds(vars.pauseTimer.ElapsedMilliseconds);
+
+    if (!old.paused && current.paused) { vars.pauseTimer.Start(); current.pauseTime = TimeSpan.Zero; }
+    if (old.paused && !current.paused) { vars.totalPause += current.pauseTime + TimeSpan.FromMilliseconds(200); current.pauseTime = TimeSpan.Zero; vars.pauseTimer.Reset(); }
 }
 
 gameTime {
     if (old.igt > current.igt && !vars.Levels.Contains(current.activeScene))
         vars.totalIGT += old.igt;
-    return vars.totalIGT + current.igt;
+    return vars.totalIGT + current.igt + current.pauseTime + vars.totalPause;
 }
 
 isLoading {
