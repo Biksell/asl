@@ -1,13 +1,26 @@
 // Reminder; Game has better IGT access as well, but the UI time is used for easier verification
 // Made by Biksel, credits to Ero for making asl-help and for helping witha more accurate total IGT calculation
-// v1.1
+// v1.4 (Full Game)
 state("SG3D_Windows_64_SteamVersion_Demo") {}
+state("SG3D_Windows_64_SteamVersion") {}
 
 startup {
     Assembly.Load(File.ReadAllBytes("Components/asl-help")).CreateInstance("Unity");
 
     vars.completedLevels = new HashSet<String>();
-    vars.Levels = new List<string>() {"Level_01_Intro", "Level_03_Day", "Level_05_Sunset", "Level_08"};
+    vars.Levels = new List<string>() {"Level_01_Intro",
+                                        "Level_02_Marsh",
+                                        "Level_03_Day",
+                                        "Level_04",
+                                        "Level_04point5_NewSunset",
+                                        "Level_05_Sunset",
+                                        "Level_06_Village",
+                                        "Level_07_Swarm",
+                                        "Level_08",
+                                        "Level_09_Night",
+                                        "Level_09point5_NewNight",
+                                        "Level_Factory",
+                                        "Level_FinalBoss"};
     vars.totalIGT = new TimeSpan();
 
     vars.Helper.LoadSceneManager = true;
@@ -38,6 +51,11 @@ onStart {
 update {
     current.activeScene = vars.Helper.Scenes.Active.Name ?? current.activeScene;
 	current.loadingScene = vars.Helper.Scenes.Loaded[0].Name ?? current.loadingScene;
+
+    if(old.activeScene != current.activeScene) print(old.activeScene + "->" + current.activeScene);
+    if(old.loadingScene != current.loadingScene) print(old.loadingScene + "->" + current.loadingScene);
+
+    print(current.activeScene + "," + current.loadingScene);
 
     if(vars.Levels.Contains(current.activeScene))
         current.igt = new TimeSpan(0, 0, current.minutes, current.seconds, current.milliSeconds * 10);
