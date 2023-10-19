@@ -26,7 +26,6 @@ update {
     if (old.activeScene != current.activeScene) print("Active: " + old.activeScene  + " -> " + current.activeScene);
     if (old.loadingScene != current.loadingScene) print("Loading: " + old.loadingScene  + " -> " + current.loadingScene);
     if (old.interaction != current.interaction) print("Interaction: " + old.interaction + "->" + current.interaction);
-    print(current.journalEntries.ToString());
 }
 
 start {
