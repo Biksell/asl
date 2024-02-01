@@ -82,7 +82,7 @@ split {
 }
 
 start {
-    return old.level == "Entry.c" && current.level == "PRO";
+    //return old.level == "Entry.c" && current.level == "PRO";
 }
 
 isLoading
