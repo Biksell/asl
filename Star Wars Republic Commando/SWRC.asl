@@ -74,27 +74,7 @@ startup {
         settings.Add(level.Key, true, "Split after " + level.Value);
     }
 
-    vars.doubleLevels = new List<string>(){
-        "GEO_01B",
-        "RAS_01B",
-        "GEO_01B",
-        "GEO_01B",
-    };
-
     vars.lastLevel = "Entry.c";
-
-    vars.completedLevels = new List<string>(){};
-    vars.count = 0;
-}
-
-onStart {
-    vars.completedLevels = new List<string>(){};
-    vars.count = 0;
-}
-
-onReset {
-    vars.completedLevels = new List<string>(){};
-    vars.count = 0;
 }
 
 split {
