@@ -77,6 +77,10 @@ startup {
     vars.lastLevel = "Entry.c";
 }
 
+onReset {
+    vars.lastLevel = "Entry.c";
+}
+
 split {
     return (old.level != current.level && vars.levelIds.IndexOf(current.level) > vars.levelIds.IndexOf(vars.lastLevel) && settings[vars.lastLevel]);
 }
@@ -91,10 +95,13 @@ isLoading
 }
 
 update {
+    //print(current.level);
     if (old.level != current.level) {
-        print(old.level + " => " + current.level + vars.completedLevels.Count.ToString());
+        print(old.level + " => " + current.level);
         if (vars.levelIds.Contains(old.level)) {
             vars.lastLevel = old.level;
         }
     }
+
+    if (old.isLoading != current.isLoading) print(old.isLoading.ToString() + " => " + current.isLoading.ToString());
 }
