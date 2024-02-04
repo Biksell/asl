@@ -82,7 +82,7 @@ onReset {
 }
 
 split {
-    return (old.level != current.level && vars.levelIds.IndexOf(current.level) > vars.levelIds.IndexOf(vars.lastLevel) && settings[vars.lastLevel]);
+    return (old.level != current.level && vars.levelIds.IndexOf(current.level.ToUpper()) > vars.levelIds.IndexOf(vars.lastLevel.ToUpper()) && settings[vars.lastLevel.ToUpper()]);
 }
 
 start {
@@ -98,7 +98,7 @@ update {
     //print(current.level);
     if (old.level != current.level) {
         print(old.level + " => " + current.level);
-        if (vars.levelIds.Contains(old.level)) {
+        if (vars.levelIds.Contains(old.level.ToUpper())) {
             vars.lastLevel = old.level;
         }
     }
