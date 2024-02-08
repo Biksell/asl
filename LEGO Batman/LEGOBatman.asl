@@ -19,6 +19,8 @@ state("LEGOBatman")
     bool start6 : 0x702A68;
 
     bool inLevel : 0x5616DD;
+
+    int roomID : 0x6C98C4;
 }
 
 
@@ -87,7 +89,7 @@ update {
 }
 
 isLoading {
-    return current.loading || current.loading2 || current.loading3 || current.loading4;
+    return current.loading || current.loading2 || current.loading3 || (current.loading4 && current.roomID != 199);
 }
 
 start {
