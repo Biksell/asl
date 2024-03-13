@@ -55,7 +55,6 @@ update {
     if(old.activeScene != current.activeScene) print(old.activeScene + "->" + current.activeScene);
     if(old.loadingScene != current.loadingScene) print(old.loadingScene + "->" + current.loadingScene);
 
-    print(current.activeScene + "," + current.loadingScene);
 
     if(vars.Levels.Contains(current.activeScene))
         current.igt = new TimeSpan(0, 0, current.minutes, current.seconds, current.milliSeconds * 10);
@@ -64,12 +63,18 @@ update {
 
     current.pauseTime = TimeSpan.FromMilliseconds(vars.pauseTimer.ElapsedMilliseconds);
 
+
+    print(current.activeScene + "," + current.loadingScene + "; " + old.igt.ToString() + ", " + current.igt.ToString());
+    print("" + (current.igt.ToString() == "00:00:00"));
+
     if (!old.paused && current.paused) { vars.pauseTimer.Start(); current.pauseTime = TimeSpan.Zero; }
     if (old.paused && !current.paused) { vars.totalPause += current.pauseTime + TimeSpan.FromMilliseconds(200); current.pauseTime = TimeSpan.Zero; vars.pauseTimer.Reset(); }
 }
 
 gameTime {
     if (old.igt > current.igt && !vars.Levels.Contains(current.activeScene))
+        vars.totalIGT += old.igt;
+    if (current.igt.ToString() == "00:00:00" && old.igt > current.igt && vars.Levels.Contains(current.activeScene))
         vars.totalIGT += old.igt;
     return vars.totalIGT + current.igt + current.pauseTime + vars.totalPause;
 }
