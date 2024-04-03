@@ -15,15 +15,18 @@ startup {
         "LOST CLAIM",
         "WELLSPRING CANYON",
         "HEADSTONE PEAK",
+        "CANNONEER'S FOLLY",
         "BEETLE RIDER",
         "MAGMAWORKS",
         "POISON GAS PASS", // In game: POISON RIDGE
+        "MARAUDER BEACH",
         "GIANT'S KITCHEN",
         "WHEELBIT PITS", // In game: ROTOBURR PITS
         "DRILLWORM", // In game: MAGMAWORM
         "CANNON CLIMB",
         "BRITTLE  GLACIER",
         "SEA OF TEETH",
+        "AVALANCHE",
         "BREAKER PASS",
         "MINT'S CONVOY",
         "ICEMELT MARSH",
