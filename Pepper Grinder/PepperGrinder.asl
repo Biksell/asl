@@ -12,6 +12,8 @@ state("PepperGrinder") {
 }
 
 startup {
+    // Will be used after sigscanning is setup
+	//Assembly.Load(File.ReadAllBytes("Components/asl-help")).CreateInstance("Basic");
     vars.Levels = new List<string>() {
         "LOST CLAIM",
         "WELLSPRING CANYON",
@@ -82,7 +84,11 @@ startup {
     settings.Add("splitComplete", true, "Level completion fade out (Any%)", "split_main");
     settings.Add("exitStage", false, "Exiting stage (All Skull Coins)", "split_main");
     settings.Add("shopSplit", false, "Exiting shop (100%)", "split_main");
-    settings.Add("hitcount", false, "Enable Hit Counter");
+    settings.Add("misc", false, "Miscellaneous (optional)");
+    settings.Add("hitcount", false, "Show Hit Counter", "misc");
+
+    //vars.Helper.Game = game;
+    //vars.Helper.AlertGameTime();
 }
 
 update {
