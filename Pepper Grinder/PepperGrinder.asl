@@ -1,4 +1,5 @@
 // Made by Biksel
+// asl-help by ero (https://github.com/just-ero/asl-help/)
 
 state("PepperGrinder") {
     string32 level: 0x452B1D1;
@@ -12,8 +13,7 @@ state("PepperGrinder") {
 }
 
 startup {
-    // Will be used after sigscanning is setup
-	//Assembly.Load(File.ReadAllBytes("Components/asl-help")).CreateInstance("Basic");
+	Assembly.Load(File.ReadAllBytes("Components/asl-help")).CreateInstance("Basic");
     vars.Levels = new List<string>() {
         "LOST CLAIM",
         "WELLSPRING CANYON",
@@ -57,38 +57,12 @@ startup {
     vars.hits = 0;
     vars.firstSplit = false;
 
-    vars.SetTextComponent = (Action<string, string>)((id, text) =>
-	{
-        var textSettings = timer.Layout.Components.Where(x => x.GetType().Name == "TextComponent").Select(x => x.GetType().GetProperty("Settings").GetValue(x, null));
-        var textSetting = textSettings.FirstOrDefault(x => (x.GetType().GetProperty("Text1").GetValue(x, null) as string) == id);
-        if (textSetting == null)
-        {
-            var textComponentAssembly = Assembly.LoadFrom("Components\\LiveSplit.Text.dll");
-            var textComponent = Activator.CreateInstance(textComponentAssembly.GetType("LiveSplit.UI.Components.TextComponent"), timer);
-            timer.Layout.LayoutComponents.Add(new LiveSplit.UI.Components.LayoutComponent("LiveSplit.Text.dll", textComponent as LiveSplit.UI.Components.IComponent));
-
-            textSetting = textComponent.GetType().GetProperty("Settings", BindingFlags.Instance | BindingFlags.Public).GetValue(textComponent, null);
-            textSetting.GetType().GetProperty("Text1").SetValue(textSetting, id);
-        }
-
-        if (textSetting != null)
-            textSetting.GetType().GetProperty("Text2").SetValue(textSetting, text);
-	});
-
-    vars.UpdateHitCounter = (Action<int>)((hits) =>
-    {
-        vars.SetTextComponent("Hit count: ", hits.ToString());
-    });
-
     settings.Add("split_main", true, "Split on: ");
     settings.Add("splitComplete", true, "Level completion fade out (Any%)", "split_main");
     settings.Add("exitStage", false, "Exiting stage (All Skull Coins)", "split_main");
     settings.Add("shopSplit", false, "Exiting shop (100%)", "split_main");
     settings.Add("misc", false, "Miscellaneous (optional)");
     settings.Add("hitcount", false, "Show Hit Counter", "misc");
-
-    //vars.Helper.Game = game;
-    //vars.Helper.AlertGameTime();
 }
 
 update {
@@ -109,8 +83,8 @@ update {
     if (settings["hitcount"]) {
         if(old.hp != current.hp && (old.hp - current.hp) == 1) {
             vars.hits += 1;
+            vars.Helper.Texts["hitcount"] = vars.hits + "";
         }
-        vars.UpdateHitCounter(vars.hits);
     }
 
     // Debug
@@ -133,6 +107,12 @@ onStart {
     vars.ended = false;
     vars.hits = 0;
     vars.firstSplit = false;
+
+    if (settings["hitcount"]) {
+        vars.Helper.Texts["hitcount"].Left = "Hit count: ";
+        vars.Helper.Texts["hitcount"].Right = vars.hits + "";
+    }
+    else if (!settings["hitcount"]) vars.Helper.Texts.Remove("hitcount");
 }
 
 onSplit {
@@ -146,13 +126,13 @@ start {
 
 split {
     // Doublesplits
-    if (vars.lastSplit.ElapsedMilliseconds > 0) return false;
+    if (vars.lastSplit.IsRunning) return false;
 
     // Most splits
     if (settings["splitComplete"] && vars.Levels.Contains(old.level) && String.IsNullOrEmpty(current.level)) return true;
 
     // First split
-    if (settings["splitComplete"] && !vars.firstSplit && !old.map && current.map && vars.lastPause.ElapsedMilliseconds == 0 && String.IsNullOrEmpty(old.level) && String.IsNullOrEmpty(current.level)) return true;
+    if (settings["splitComplete"] && !vars.firstSplit && !old.map && current.map && !vars.lastPause.IsRunning && String.IsNullOrEmpty(old.level) && String.IsNullOrEmpty(current.level)) return true;
 
     // Final split
     if (current.level == "EMPEROR NARO" && current.igt != 0 && current.mainMenu && !vars.ended) {
