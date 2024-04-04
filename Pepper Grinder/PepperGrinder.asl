@@ -1,11 +1,12 @@
 // Made by Biksel
+
 state("PepperGrinder") {
     string32 level: 0x452B1D1;
     double igt: 0x24E7188;
     bool mainMenu: 0x4682C10;
     bool map: 0x316907C;
-    int lastPause: 0x2FD3854; //3 before main menu, 1 after, prevents starting on game startup
-    int lastPause2: 0x3048A40; //1 in main menu, random elsewhere, prevents starting on load game
+    int safety: 0x2FD3854; //3 before main menu, 1 after, prevents starting on game startup
+    int safety2: 0x3048A40; //1 in main menu, random elsewhere, prevents starting on load game
     double hp: 0x452B290;
     bool pauseLvl1: 0x4649038, 0x2E0, 0x18, 0x120;
 }
@@ -36,6 +37,18 @@ startup {
         "DEEPROT CITY",
         "EMPEROR NARO"
     };
+
+    vars.AltLevels = new List<string>() {
+        "HEADSTONE PEAK",
+        "CANNONEER'S FOLLY",
+        "POISON GAS PASS",
+        "MARAUDER BEACH",
+        "SEA OF TEETH",
+        "AVALANCHE",
+        "SUNKEN CITY LIMITS",
+        "WITCHFIRE BOG"
+    };
+
     vars.ended = false;
     vars.lastPause = new Stopwatch();
     vars.lastSplit = new Stopwatch();
@@ -65,15 +78,19 @@ startup {
         vars.SetTextComponent("Hit count: ", hits.ToString());
     });
 
-    settings.Add("hitcount", false, "Hit Counter");
+    settings.Add("split_main", true, "Split on: ");
+    settings.Add("splitComplete", true, "Level completion fade out (Any%)", "split_main");
+    settings.Add("exitStage", false, "Exiting stage (All Skull Coins)", "split_main");
+    settings.Add("shopSplit", false, "Exiting shop (100%)", "split_main");
+    settings.Add("hitcount", false, "Enable Hit Counter");
 }
 
 update {
-    // Prevent split on exiting level without completion
+    // Prevent split on exiting level1 without completion
     if (old.pauseLvl1 && !current.pauseLvl1) {
         vars.lastPause.Start();
     }
-    if (vars.lastPause.ElapsedMilliseconds > 100) {
+    if (vars.lastPause.ElapsedMilliseconds > 500) {
         vars.lastPause.Reset();
     }
 
@@ -83,7 +100,7 @@ update {
     }
 
     // Hitcounter update
-    if(settings["hitcount"]) {
+    if (settings["hitcount"]) {
         if(old.hp != current.hp && (old.hp - current.hp) == 1) {
             vars.hits += 1;
         }
@@ -103,7 +120,7 @@ update {
 }
 
 isLoading {
-    return current.map || (current.mainMenu && current.lastPause2 == 1);
+    return current.map || (current.mainMenu && current.safety2 == 1);
 }
 
 onStart {
@@ -118,7 +135,7 @@ onSplit {
 }
 
 start {
-    return old.mainMenu && !current.mainMenu && current.lastPause != 3 && current.lastPause2 == 1;
+    return old.mainMenu && !current.mainMenu && current.safety != 3 && current.safety2 == 1;
 }
 
 split {
@@ -126,14 +143,20 @@ split {
     if (vars.lastSplit.ElapsedMilliseconds > 0) return false;
 
     // Most splits
-    if (vars.Levels.Contains(old.level) && String.IsNullOrEmpty(current.level)) return true;
+    if (settings["splitComplete"] && vars.Levels.Contains(old.level) && String.IsNullOrEmpty(current.level)) return true;
 
     // First split
-    if (!vars.firstSplit && !old.map && current.map && vars.lastPause.ElapsedMilliseconds == 0 && String.IsNullOrEmpty(old.level) && String.IsNullOrEmpty(current.level)) return true;
+    if (settings["splitComplete"] && !vars.firstSplit && !old.map && current.map && vars.lastPause.ElapsedMilliseconds == 0 && String.IsNullOrEmpty(old.level) && String.IsNullOrEmpty(current.level)) return true;
 
     // Final split
     if (current.level == "EMPEROR NARO" && current.igt != 0 && current.mainMenu && !vars.ended) {
         vars.ended = true;
         return true;
     }
+
+    // All Skull Coins (exit bonus stage before completion on extra levels and the alternative route to them)
+    if (settings["exitStage"] && vars.AltLevels.Contains(current.level) && !old.map && current.map) return true;
+
+    // 100% Shop split (Both exit through pausing and normally)
+    if (settings["shopSplit"] && current.level == "CURIOSITY SHOP" && !old.map && current.map) return true;
 }
