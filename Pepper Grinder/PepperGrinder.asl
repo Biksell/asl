@@ -83,7 +83,7 @@ update {
     if (settings["hitcount"]) {
         if(old.hp != current.hp && (old.hp - current.hp) == 1) {
             vars.hits += 1;
-            vars.Helper.Texts["hitcount"] = vars.hits + "";
+            vars.Helper.Texts["hitcount"].Right = vars.hits + "";
         }
     }
 
