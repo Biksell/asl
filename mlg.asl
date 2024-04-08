@@ -18,44 +18,33 @@ state("LEGOBatman")
     bool inLevel : 0x5616DD;
 }
 
-isLoading {
-    return current.loading || current.loading2 || current.loading3 || current.loading4;
-}
-
 state("LEGOStarWarsSaga")
 {
+    uint gogstatus : 0x550790;
+    byte status : 0x526BD0;
+    byte statust : 0x481C38;
+    byte newgame : 0x47B738;
+    byte gognewgame : 0x47b758;
+    byte posb : 0x40B708;
+    byte posc : 0x40B70C;
+    string12 stream : 0x4CBB90;
+    int gogstream : 0x551bc0;
     float wipe : 0x5507a0;
     //This is our third variable that is a short that references address 0x5513d0,0xf0
+    short targetMap : 0x5513d0,0xf0;
+    short jedibattlewave : 0x488ef4;
     //This is a lapcount that can land in the water
+    float lapcount : 0x4824a0,0x28;
+    int mapaddr : 0x402c54;
+    int kitcount : 0x00551264;
+    short incutscene : 0x551c54;
     int gameReboot: 0x0040e26c;
     int canskip: 0x003fa5f0;
     int transition: 0x00550768;
 	int pause: 0x0047b7ac;
     int alttab: 0x00427610;
 	int room: 0x551bc0;
+	int roomPath: 0x5513d0;
     int areaID: 0x00403784;
     float inCrawl: 0x47aab0;
-}
-
-isLoading
-{
-	return ((current.gameReboot == 10000) || ((current.transition == 1) && (old.pause == 0) && (current.areaID != 66) && (current.inCrawl == 0))
-	|| (current.canskip == 0) || (current.room == 325 && old.wipe == 1 && current.wipe == 1 && vars.inCantina)) && (current.alttab != 0);
-}
-
-state("LEGOIndy")
-{
-    bool Loading: 0x5C3D24;
-}
-
-state ("LEGOIndy2")
-{
-    bool Load1: 0xB0F5C8;
-    bool Load2: 0xACBF08;
-    bool Load3: 0xC5B838;
-}
-
-state("LEGOPirates", "lpc")
-{
-    bool Loading: 0xA171A4;
 }

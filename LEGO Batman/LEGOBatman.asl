@@ -6,7 +6,7 @@ state("LEGOBatman")
     bool loading: 0x5C999C; // Yellow shield at the bottom of screen, character info screens
     bool loading2: 0x696D2C; // Character info screens
     bool loading3: 0x6CA7B0; // Could be used for autostarting
-    bool loading4: 0x6B29D0; // Exiting level black screen
+    bool loading4: 0x6B29D0;
 
     bool uiElementChange : 0x6D0270; // "Stud counter & Continue story" enabled, we want to split on 1 -> 0
     bool status: 0x696BA8; // Statu screen enabled
@@ -29,10 +29,10 @@ state("Game")
     bool loading: 0x5C999C; // Yellow shield at the bottom of screen, character info screens
     bool loading2: 0x696D2C; // Character info screens
     bool loading3: 0x6CA7B0; // Could be used for autostarting
-    bool loading4: 0x6B29D0; // Exiting level black screen
+    bool loading4: 0x6B29D0;
 
     bool uiElementChange : 0x6D0270; // "Stud counter & Continue story" enabled, we want to split on 1 -> 0
-    bool status: 0x696BA8; // Status screen enabled
+    bool status: 0x696BA8; // Statu screen enabled
 
     bool start1 : 0x693034;
     bool start2 : 0x693674;
@@ -46,7 +46,6 @@ state("Game")
 startup {
     vars.changeCount = 0;
     vars.level = 1;
-    refreshRate = 1000;
 
     //settings.Add("freeplay", true, "Start on loading into level (Free Play)");
     settings.Add("start_story", false, "(EXPERIMENTAL) Start on New Game (Add 0.583 offset to your timer)");
@@ -68,58 +67,29 @@ startup {
         }
     }
 
-    vars.timer = new Stopwatch();
-    vars.loadTimer = new Stopwatch();
-    vars.pausedTime = new TimeSpan();
+    //vars.startDelay = new Stopwatch();
 }
 
 onStart {
-    vars.timer.Start();
     vars.changeCount = 0;
     vars.level = 1;
-}
-
-onReset {
-    vars.timer.Reset();
-    vars.loadTimer.Reset();
-    vars.pausedTime = TimeSpan.Zero;
+    //vars.startDelay.Reset();
 }
 
 update {
     if (old.uiElementChange && !current.uiElementChange) {
         print(vars.changeCount + " -> " + vars.changeCount++);
     }
-    //if (old.loading2 != current.loading2) print(old.loading2 + " >> " + current.loading2);
-
-    // Loadless
-    if ((!old.loading && current.loading) || (!old.loading3 && current.loading3) || (!old.loading4 && current.loading4 && current.roomID != 199)) {
-        vars.timer.Stop();
-    }
-    if (((old.loading && !current.loading) || (old.loading3 && !current.loading3) || (old.loading4 && !current.loading4)) && (!current.loading || current.loading2 || current.loading3)) {
-        vars.timer.Start();
-    }
-    if (!old.loading2 && current.loading2) {
-        vars.loadTimer.Start();
-        vars.timer.Stop();
-    }
-    if (old.loading2 && !current.loading2) {
-        vars.timer.Start();
-        vars.loadTimer.Stop();
-        print(vars.loadTimer.ElapsedMilliseconds.ToString());
-        if (vars.loadTimer.ElapsedMilliseconds < 33) {
-            vars.pausedTime.Add(TimeSpan.FromMilliseconds(vars.loadTimer.ElapsedMilliseconds));
-            print("Removed false load");
-        }
-        vars.loadTimer.Reset();
-    }
-}
-
-gameTime {
-    return TimeSpan.FromMilliseconds(vars.timer.ElapsedMilliseconds) + TimeSpan.FromMilliseconds(vars.pausedTime.TotalMilliseconds);
+    //if (settings["freeplay"] && old.loading2 && !current.loading2) vars.startDelay.Start();
+    //if (vars.startDelay.ElapsedMilliseconds > 100) vars.startDelay.Reset();
+    //print(current.inLevel + ", " + current.loading2);
+    //print(current.start1 + "," + current.start2 + "," + current.start3 + "," + current.start4 + "," + current.start5 + "," + current.start6);
+    //if (old.uiElementChange != current.uiElementChange) print(vars.changeCount.ToString());
+    //print((settings["split_continue"] && !settings["1_1_0studs"] && vars.level == 1 && vars.changeCount >= 1).ToString());
 }
 
 isLoading {
-    return true;
+    return current.loading || current.loading2 || current.loading3 || (current.loading4 && current.roomID != 199);
 }
 
 start {
