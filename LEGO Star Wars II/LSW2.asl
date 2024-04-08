@@ -1,9 +1,9 @@
 // Made by Biksel
-
 /*
 4-1 R1: BLOCKADERUNNER_A
 4-2
 */
+
 state("LegoStarWarsII") {
     bool load: 0x26A26C;
     bool cutscene: 0x262044;
@@ -11,12 +11,6 @@ state("LegoStarWarsII") {
     string16 levelBuffer: 0x330671E;
     float gametime: 0x330DF8C;
 }
-
-/*
-gameTime {
-    return TimeSpan.FromSeconds(current.gametime);
-}
-*/
 
 isLoading {
     return current.load;
@@ -35,10 +29,6 @@ update {
     if (old.levelBuffer != current.levelBuffer){
         print("levelBuffer: " + old.levelBuffer + " -> " + current.levelBuffer);
     }
-}
-
-split {
-
 }
 
 exit {
