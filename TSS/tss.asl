@@ -4,7 +4,7 @@ state("LEGOSTARWARSSKYWALKERSAGA_DX11", "6Apr22")
 {
     byte load: 0x05D8D850, 0xD8, 0x40, 0x10, 0x58, 0xB0, 0x0, 0x1B8;
     byte loads: 0x05D9E1A8, 0xC8, 0x10, 0x50, 0x60, 0x38, 0x30, 0xE0;
-    byte cs: 0x5AF9918;
+    byte cutscene: 0x5D99380, 0x460, 0xC8, 0x48, 0x0, 0x428;
     string32 quest: 0x5D8D850, 0x308, 0x298, 0x0;
 }
 
@@ -14,7 +14,7 @@ state("LEGOSTARWARSSKYWALKERSAGA_DX11", "4May23")
 }
 
 startup {
-        vars.Quests = new List<string> {
+    vars.Quests = new List<string> {
         "Negotiations",
         "Warn the Naboo",
         "A Bigger Fish",
@@ -143,15 +143,15 @@ startup {
     vars.SkippedSplits = new List<string> {"Nightmares", "Tractor Beam Takedown ", "Back to the Fleet ", "Attack on Tuanul", "Finn... Leaking... Bag?"};
 
     vars.EndSplits = new Dictionary<string, int> {
-        "Better Call Maul": 1,
-        "The Battle of the Jedi": 2,
-        "The High Ground": 1,
-        "Stay on Target": 2,
-        "Revelations!": 1,
-        "Fulfill Your Destiny": 2,
-        "Piece of the Resistance": ,
-        "Ground A-Salt",
-        "Be With Me"
+        {"Now This is Podracing", 1},
+        {"The Battle of the Jedi", 2},
+        {"The High Ground", 1},
+        {"Stay on Target", 2},
+        {"Revelations!", 1},
+        {"Fulfill Your Destiny", 2},
+        {"Piece of the Resistance", 2},
+        {"Ground A-Salt", 1},
+        {"Be With Me", 3}
     };
 
     settings.Add("split", false, "Experimental splitting");
@@ -177,10 +177,22 @@ init {
             version = "6Apr22";
             break;
     }
+
+    vars.csCount = 0;
+}
+
+onStart {
+    vars.csCount = 0;
+}
+
+onSplit {
+    vars.csCount = 0;
 }
 
 update {
+    if (old.cutscene == 0 && current.cutscene == 1) vars.csCount++;
     if (old.quest != current.quest) print(old.quest + " -> " + current.quest);
+    //print(vars.csCount + "");
 }
 
 isLoading
@@ -190,7 +202,8 @@ isLoading
 }
 
 split {
-    return old.quest != current.quest && settings[old.quest] && vars.Quests.IndexOf(old.quest) < vars.Quests.IndexOf(current.quest);
+    return (old.quest != current.quest && settings[old.quest] && vars.Quests.IndexOf(old.quest) < vars.Quests.IndexOf(current.quest) && !vars.EndSplits.ContainsKey(old.quest))
+            || (vars.EndSplits.ContainsKey(current.quest) && vars.csCount == vars.EndSplits[current.quest]);
 }
 
 
