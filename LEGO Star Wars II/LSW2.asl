@@ -10,6 +10,7 @@ state("LegoStarWarsII") {
     //bool status: 0x269A90; //unstable
     byte status: 0x24F389;
     string16 levelBuffer: 0x330671E;
+    string14 level2: 0x2FB7AF7;
     float gametime: 0x330DF8C;
     byte newgame: 0x243BC6;
 }
@@ -42,6 +43,7 @@ update {
     if (old.newgame != current.newgame){
         print("newgame: " + old.newgame + " -> " + current.newgame);
     }
+    //print(current.level2);
 }
 
 start {
@@ -52,7 +54,7 @@ start {
 
 split {
     if(!settings["split"]) return false;
-    return (settings["splitStatus"] && old.status == 0 && current.status == 255 && !String.IsNullOrEmpty(current.levelBuffer)) ||
+    return (settings["splitStatus"] && old.status == 0 && current.status == 255 && (!String.IsNullOrEmpty(current.levelBuffer) || current.level2 == "SpeederChase_A")) ||
             (settings["splitBespinCS"] && (current.levelBuffer == "CityEscape_Outro" || current.levelBuffer == "CityEscape_Statu") && !old.cutscene && current.cutscene);
 }
 
