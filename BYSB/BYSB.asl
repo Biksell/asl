@@ -12,11 +12,14 @@ state("BYSkateboarding", "GOTY") {
     byte orange: 0x44081C, 0xEC, 0x50, 0x8;
     byte red: 0x44081C, 0xEC, 0x50, 0xC;
     byte load: 0x442880, 0x58;
+    byte inChallenge: 0x44081C, 0xAC, 0x48;
     bool menu: 0x47A608;
     string16 level: 0x44081C, 0x100, 0xE;
+    string4 chalTitle: 0x4404B0;
 }
 
 init {
+    vars.currentLevel = "";
     switch (modules.First().ModuleMemorySize) {
         case 5611520:
             version = "OG";
@@ -43,6 +46,7 @@ isLoading {
 }
 
 split {
+    if (version == "GOTY" && current.chalTitle == "Andy" && old.inChallenge == 1 && current.inChallenge == 0) return true;
     return current.level == vars.currentLevel && ((current.yellow - old.yellow == 1) || (current.orange - old.orange == 1) || (current.red - old.red == 1));
 }
 
