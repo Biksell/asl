@@ -19,6 +19,7 @@ state("BYSkateboarding", "GOTY") {
 }
 
 init {
+    refreshRate = 200;
     vars.currentLevel = "";
     switch (modules.First().ModuleMemorySize) {
         case 5611520:
@@ -47,6 +48,7 @@ isLoading {
 
 split {
     if (version == "GOTY" && current.chalTitle == "Andy" && old.inChallenge == 1 && current.inChallenge == 0) return true;
+    else if (version == "GOTY" && current.level == "skatepark/" && current.chalTitle == "Boss" && old.inChallenge == 1 && current.inChallenge == 0) return true;
     return current.level == vars.currentLevel && ((current.yellow - old.yellow == 1) || (current.orange - old.orange == 1) || (current.red - old.red == 1));
 }
 
