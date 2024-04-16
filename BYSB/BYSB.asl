@@ -1,3 +1,6 @@
+// Made by Biksel
+// Supports both original and GOTY versions
+
 state("BYSkateboarding", "OG") {
     byte yellow: 0x448824, 0xBC, 0x3C, 0x4;
     byte orange: 0x448824, 0xBC, 0x3C, 0x8;
