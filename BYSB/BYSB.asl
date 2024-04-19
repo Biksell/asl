@@ -57,7 +57,7 @@ split {
     if (version == "GOTY" && settings["split_chal"] && current.chalTitle == "Andy" && old.inChallenge == 1 && current.inChallenge == 0) return true;
     else if (version == "GOTY" && current.level == "skatepark/" && current.chalTitle == "Boss" && old.inChallenge == 1 && current.inChallenge == 0) return true;
     return (settings["split_chal"] && current.level == vars.currentLevel && ((current.yellow - old.yellow == 1) || (current.orange - old.orange == 1) || (current.red - old.red == 1)))
-            || (settings["split_level"] && old.level != current.level)    ;
+            || (settings["split_level"] && old.level != current.level);
 }
 
 start {
