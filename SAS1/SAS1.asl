@@ -6,13 +6,13 @@ state("Swords and Sandals Classic Collection") {
 
 init {
     vars.bosses = new List<string>() {
-        "Wolfg",
-        "Bo'su",
-        "The S",
-        "Nine ",
-        "Stylo",
-        "Lord ",
-        "HeCha"
+        "Wolfgan",
+        "Bo'sun ",
+        "The Sla",
+        "Nine Ca",
+        "Styloni",
+        "Lord Ta",
+        "HeChaos"
     };
 
     current.raw = null;
@@ -20,12 +20,7 @@ init {
     current.enemy = "";
     current.stats = new List<int>(new int[7]);
     current.bossesKilled = 0;
-    vars.changed = false;/*
-    var directory = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\com.game.whiskeybarrelstudios.swordsandsandalsclassic\Local Store\#SharedObjects\swf\swords_sandals_download.swf");
-    vars.file = (from f in directory.GetFiles()
-                orderby f.LastWriteTime descending
-                select f).First();
-    vars.reader = new StreamReader(vars.file.FullName, Encoding.Default);*/
+    vars.changed = false;
 }
 
 update {
@@ -41,30 +36,8 @@ update {
     current.raw = vars.reader.ReadLine();
     if (old.raw == current.raw) return false;
     current.data = current.raw.Split(',');
-    current.enemy = current.data[27].Length > 4 ? current.data[27].Substring(0, 5) : current.enemy;
+    current.enemy = current.data[27].Length > 4 ? current.data[27].Substring(0, 8) : current.enemy;
     current.gold = Int32.Parse(current.data[28]);
-
-    var newStats = new List<int>(new int[7]);
-    for (int i = 0; i < 7; i++) {
-        newStats[i] = Int32.Parse(current.data[16 + i]);
-    }
-    current.stats = newStats;
-    for(int i = 0; i < current.data.Length; i++) {
-        //print(entry + " " + Array.IndexOf(vars.data, entry));
-        print(current.data[i] + ", old: " + old.data[i] + ", index:" + i);
-    }
-
-    print("Stats: " + string.Join(", ", current.stats));
-
-    vars.changed = false;
-    for (int i = 0; i < 7; i++) {
-        print("Old: " + old.stats[i] + ", Current: " + newStats[i]);
-        if (old.stats[i] > current.stats[i] && current.stats[i] == 1) {
-            vars.changed = true;
-        }
-    }
-
-    print(vars.changed + "");
 
     vars.reader.Close();
 }
@@ -75,7 +48,7 @@ split {
 }
 
 start {
-    return old.gold == current.gold && current.gold == 1000 && vars.changed == false;
+    return old.gold == current.gold && current.gold == 1000;
 }
 
 exit {
