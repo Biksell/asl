@@ -6,13 +6,13 @@ state("Swords and Sandals Classic Collection") {
 
 init {
     vars.bosses = new List<string>() {
-        "Wolfgan",
-        "Bo'sun ",
-        "The Sla",
-        "Nine Ca",
-        "Styloni",
-        "Lord Ta",
-        "HeChaos"
+        "Wolfgang",
+        "Bo'sun S",
+        "The Slav",
+        "Nine Cat",
+        "Styloniu",
+        "Lord Tal",
+        "HeChaos "
     };
 
     current.raw = null;
