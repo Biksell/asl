@@ -20,7 +20,8 @@ init {
     current.enemy = "";
     current.stats = new List<int>(new int[7]);
     current.bossesKilled = 0;
-    vars.changed = false;
+    current.gold = 0;
+    current.name = "";
 }
 
 update {
@@ -31,15 +32,22 @@ update {
                 select f).First();
     vars.reader = new StreamReader(new FileStream(vars.file.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete), Encoding.Default);
 
-
     if (vars.reader == null) return;
-    current.raw = vars.reader.ReadLine();
-    if (old.raw == current.raw) return false;
-    current.data = current.raw.Split(',');
-    current.enemy = current.data[27].Length > 4 ? current.data[27].Substring(0, 8) : current.enemy;
-    current.gold = Int32.Parse(current.data[28]);
 
-    vars.reader.Close();
+    current.raw = vars.reader.ReadLine();
+
+    // Wait until contents change
+    if (old.raw == current.raw) return false;
+
+    //
+    current.data = current.raw.Split(',');
+    current.enemy = current.data[27].Length > 4 ? current.data[27].Substring(0, 7) : current.enemy;
+    current.gold = Int32.Parse(current.data[28]);
+    var a = "";
+    for(int i = 0; i < 8; i++) {
+        a += current.raw[55+i];
+    }
+    current.name = a;
 }
 
 split {
@@ -48,9 +56,9 @@ split {
 }
 
 start {
-    return old.gold == current.gold && current.gold == 1000;
+    return old.gold == current.gold && current.gold == 1000 && current.name == "Nameless";
 }
 
-exit {
-    vars.reader.Close();
+reset {
+    return old.name == "Nameless" && current.name == "Gladiato";
 }
