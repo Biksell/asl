@@ -41,13 +41,14 @@ update {
 
     //
     current.data = current.raw.Split(',');
-    current.enemy = current.data[27].Length > 4 ? current.data[27].Substring(0, 7) : current.enemy;
+    current.enemy = current.data[27].Length > 4 ? current.data[27].Substring(0, 8) : current.enemy;
     current.gold = Int32.Parse(current.data[28]);
     var a = "";
     for(int i = 0; i < 8; i++) {
         a += current.raw[55+i];
     }
     current.name = a;
+    print(current.enemy);
 }
 
 split {
