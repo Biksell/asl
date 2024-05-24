@@ -7,13 +7,20 @@ state("PepperGrinder", "1.0") {
     bool mainMenu: 0x4682C10;
     bool map: 0x316907C;
     int safety: 0x2FD3854; //3 before main menu, 1 after, prevents starting on game startup
-    int safety2: 0x3048A40; //1 in main menu, random elsewhere, prevents starting on load game
+    int safety2: 0x3048A40; //1 in main menu, random elsewhere, prevents starting on load game, 8 in lvl1, 2 in map
     double hp: 0x452B290;
     bool pauseLvl1: 0x4649038, 0x2E0, 0x18, 0x120;
 }
 
 state("PepperGrinder", "1.1") {
+    string32 level: 0x45838A9;
+    double igt: 0x4583A00;
+    bool mainMenu: 0x46DC830;
     bool map: 0x318DDDC;
+    int safety: 0x2FFE544;
+    int safety2: 0x306D7A0;
+    double hp: 0x4583968;
+    bool pauseLvl1: 0x46A2C58, 0x2E0, 0x18, 0x120;
 }
 
 init {
@@ -83,8 +90,6 @@ startup {
 update {
     // Prevent split on exiting level1 without completion
     //print(modules.First().ModuleMemorySize + "");
-    if (version == "1.1") print("aa");
-    if (version == "1.1") return;
     if (old.pauseLvl1 && !current.pauseLvl1) {
         vars.lastPause.Start();
     }
@@ -122,53 +127,49 @@ isLoading {
 }
 
 onStart {
-    if (version == "1.0") {
-        vars.ended = false;
-        vars.hits = 0;
-        vars.firstSplit = false;
+    vars.ended = false;
+    vars.hits = 0;
+    vars.firstSplit = false;
 
-        if (settings["hitcount"]) {
-            vars.Helper.Texts["hitcount"].Left = "Hit count: ";
-            vars.Helper.Texts["hitcount"].Right = vars.hits + "";
-        }
-        else if (!settings["hitcount"]) vars.Helper.Texts.Remove("hitcount");
+    if (settings["hitcount"]) {
+        vars.Helper.Texts["hitcount"].Left = "Hit count: ";
+        vars.Helper.Texts["hitcount"].Right = vars.hits + "";
     }
+    else if (!settings["hitcount"]) vars.Helper.Texts.Remove("hitcount");
 }
 
 onSplit {
-    if (version == "1.0") {
-        vars.firstSplit = true;
-        vars.lastSplit.Start();
-    }
+    vars.firstSplit = true;
+    vars.lastSplit.Start();
 }
 
 start {
-    if (version == "1.0") {
-        return old.mainMenu && !current.mainMenu && current.safety != 3 && current.safety2 == 1;
-    }
+    return old.mainMenu && !current.mainMenu && current.safety != 3 && current.safety2 == 1;
 }
 
 split {
+    // Doublesplits
+    if (vars.lastSplit.IsRunning) return false;
+
+    // Most splits
+    if (settings["splitComplete"] && vars.Levels.Contains(old.level) && String.IsNullOrEmpty(current.level)) return true;
+
+    // First split
+    if (settings["splitComplete"] && !vars.firstSplit && !old.map && current.map && !vars.lastPause.IsRunning && String.IsNullOrEmpty(old.level) && String.IsNullOrEmpty(current.level)) return true;
+
     if (version == "1.0") {
-        // Doublesplits
-        if (vars.lastSplit.IsRunning) return false;
-
-        // Most splits
-        if (settings["splitComplete"] && vars.Levels.Contains(old.level) && String.IsNullOrEmpty(current.level)) return true;
-
-        // First split
-        if (settings["splitComplete"] && !vars.firstSplit && !old.map && current.map && !vars.lastPause.IsRunning && String.IsNullOrEmpty(old.level) && String.IsNullOrEmpty(current.level)) return true;
-
         // Final split
         if (current.level == "EMPEROR NARO" && current.igt != 0 && current.mainMenu && !vars.ended) {
             vars.ended = true;
             return true;
         }
-
-        // All Skull Coins (exit bonus stage before completion on extra levels and the alternative route to them)
-        if (settings["exitStage"] && vars.AltLevels.Contains(current.level) && !old.map && current.map) return true;
-
-        // 100% Shop split (Both exit through pausing and normally)
-        if (settings["shopSplit"] && current.level == "CURIOSITY SHOP" && !old.map && current.map) return true;
     }
+
+
+    // All Skull Coins (exit bonus stage before completion on extra levels and the alternative route to them)
+    if (settings["exitStage"] && vars.AltLevels.Contains(current.level) && !old.map && current.map) return true;
+
+    // 100% Shop split (Both exit through pausing and normally)
+    if (settings["shopSplit"] && current.level == "CURIOSITY SHOP" && !old.map && current.map) return true;
+
 }
