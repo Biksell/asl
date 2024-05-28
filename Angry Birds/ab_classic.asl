@@ -19,3 +19,7 @@ split {
 start {
     return current.birdsShot == 1 && old.canShoot && !current.canShoot;
 }
+
+reset {
+    return old.level != 1 && old.level != 21 && current.level == 1;
+}
