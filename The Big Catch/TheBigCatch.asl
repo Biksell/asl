@@ -12,7 +12,7 @@ startup {
     settings.Add("split_10", true, "Split on returning 10 fish", "categories");
     settings.Add("split_26", false, "Split on returning 26 fish (All Fish)", "categories");
     settings.Add("split_scales", false, "Split on collecting the final collectable (100%)", "categories");
-    settings.Add("reset", false, "Reset on entering new file");
+    settings.Add("reset", true, "Reset on entering new file");
 }
 
 init {
