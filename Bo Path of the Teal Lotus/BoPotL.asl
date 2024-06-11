@@ -24,7 +24,7 @@ startup {
     settings.Add("split_area", true, "Split on entering: ");
     foreach(var area in vars.Areas) {
         if(area != "New Main Menu" || area != "CBF Intro") {
-            if (area == "CBF Bump Intro" || area == "UC Entrance" || area == "UC Herder" || ) {
+            if (area == "CBF Bump Intro" || area == "UC Entrance" || area == "UC Herder") {
                 settings.Add("split_" + area, true, area, "split_area");
             } else {
                 settings.Add("split_" + area, false, area, "split_area");
