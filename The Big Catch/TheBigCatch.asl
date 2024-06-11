@@ -12,7 +12,7 @@ startup {
     settings.Add("split_10", true, "Split on returning 10 fish", "categories");
     settings.Add("split_26", false, "Split on returning 26 fish (All Fish)", "categories");
     settings.Add("split_scales", false, "Split on collecting the final collectable (100%)", "categories");
-    settings.Add("reset", false, "Reset on entering new file (WARNING! will also reset on game reset)");
+    settings.Add("reset", false, "Reset on entering new file");
 }
 
 init {
@@ -23,6 +23,7 @@ init {
         vars.Helper["fileTime"] = mono.Make<float>("Manager", "_instance", "_saveManager", "_currentSaveData", "_inGameTime");
         vars.Helper["captures"] = mono.Make<int>("Manager", "_instance", "_saveManager", "_currentSaveData", "_cachedCapturablesCapturedCount");
         vars.Helper["turnedIn"] = mono.Make<int>("Manager", "_instance", "_saveManager", "_currentSaveData", "_cachedCapturesTurnedInCount");
+        vars.Helper["newSave"] = mono.Make<bool>("Manager", "_instance", "_saveManager", "_currentSaveData", "_newSave");
         vars.Helper["active"] = mono.Make<int>("Manager", "_instance", "_primaryPlayerMachine", "_characterArt", "_currentOutfit");
         vars.Helper["trad"] = mono.Make<int>("Manager", "_instance", "_primaryPlayerMachine", "_characterArt", "_traditionalOutfit");
         return true;
@@ -41,8 +42,9 @@ update {
     if(old.captures != current.captures) print("captures: " + old.captures + " -> " + current.captures);
     if(old.turnedIn != current.turnedIn) { vars.splitTimer.Start(); print("turnedIn: " + old.turnedIn + " -> " + current.turnedIn); }
     if(old.active != current.active) print("active: " + old.active + " -> " + current.active);
+    if(old.newSave != current.newSave) print("newSave: " + old.newSave + " -> " + current.newSave);
 
-    //print(current.trad + ", " + current.active);
+    //print(current.newSave + "");
 }
 
 onStart {
@@ -65,5 +67,5 @@ split {
 }
 
 reset {
-    return old.fileTime > 1f && current.fileTime == 0f && settings["reset"] && old.turnedIn != current.turnedIn && current.turnedIn == -1;
+    return old.fileTime > 1f && current.fileTime == 0f && settings["reset"] && current.newSave;
 }
