@@ -1,4 +1,5 @@
 // Made by Biksel
+// thanks to rythin for reliable resets
 // asl-help by ero (https://github.com/just-ero/asl-help/)
 
 state("The Big Catch Tacklebox") {}
