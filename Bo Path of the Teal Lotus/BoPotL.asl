@@ -42,11 +42,11 @@ startup {
 init {
     vars.Helper.TryLoad = (Func<dynamic, bool>)(mono => {
         vars.Helper["timePlayed"] = mono.Make<float>("GameManager", "instance", "betaDataManager", "TimePlayed");
-        vars.Helper["AsahiDefeated"] = mono.Make<bool>("GameManager", "instance", "QuestManager", "AsahiDefeated");
-        vars.Helper["DefeatedJorogumo"] = mono.Make<bool>("GameManager", "instance", "QuestManager", "DefeatedJorogumo");
+        //vars.Helper["AsahiDefeated"] = mono.Make<bool>("GameManager", "instance", "QuestManager", "AsahiDefeated");
+        //vars.Helper["DefeatedJorogumo"] = mono.Make<bool>("GameManager", "instance", "QuestManager", "DefeatedJorogumo");
         vars.Helper["DefeatedPUABoss"] = mono.Make<bool>("GameManager", "instance", "QuestManager", "DefeatedPUABoss");
-        vars.Helper["GashaDefeated"] = mono.Make<bool>("GameManager", "instance", "QuestManager", "GashaDefeated");
-        vars.Helper["ShogunDefeated"] = mono.Make<bool>("GameManager", "instance", "QuestManager", "ShogunDefeated");
+        //vars.Helper["GashaDefeated"] = mono.Make<bool>("GameManager", "instance", "QuestManager", "GashaDefeated");
+        //vars.Helper["ShogunDefeated"] = mono.Make<bool>("GameManager", "instance", "QuestManager", "ShogunDefeated");
         vars.Helper["q_bamboo"] = mono.Make<bool>("GameManager", "instance", "QuestManager", "AsahiBambooStaffQuestCompleted");
         vars.Helper["q_shimeji"] = mono.Make<bool>("GameManager", "instance", "QuestManager", "ShimejiQuestCompleted");
         vars.Helper["OnDemoVideo"] = mono.Make<bool>("UICache", "Instance", "OnDemoVideo");
@@ -64,11 +64,11 @@ update {
     } catch (System.Exception) {
     }
 
-    if(old.AsahiDefeated != current.AsahiDefeated) print("AsahiDefeated: " + old.AsahiDefeated + " -> " + current.AsahiDefeated);
-    if(old.DefeatedJorogumo != current.DefeatedJorogumo) print("DefeatedJorogumo: " + old.DefeatedJorogumo + " -> " + current.DefeatedJorogumo);
+    //if(old.AsahiDefeated != current.AsahiDefeated) print("AsahiDefeated: " + old.AsahiDefeated + " -> " + current.AsahiDefeated);
+    //if(old.DefeatedJorogumo != current.DefeatedJorogumo) print("DefeatedJorogumo: " + old.DefeatedJorogumo + " -> " + current.DefeatedJorogumo);
     if(old.DefeatedPUABoss != current.DefeatedPUABoss) print("DefeatedPUABoss: " + old.DefeatedPUABoss + " -> " + current.DefeatedPUABoss);
-    if(old.GashaDefeated != current.GashaDefeated) print("GashaDefeated: " + old.GashaDefeated + " -> " + current.GashaDefeated);
-    if(old.ShogunDefeated != current.ShogunDefeated) print("ShogunDefeated: " + old.ShogunDefeated + " -> " + current.ShogunDefeated);
+    //if(old.GashaDefeated != current.GashaDefeated) print("GashaDefeated: " + old.GashaDefeated + " -> " + current.GashaDefeated);
+    //if(old.ShogunDefeated != current.ShogunDefeated) print("ShogunDefeated: " + old.ShogunDefeated + " -> " + current.ShogunDefeated);
     if(old.q_bamboo != current.q_bamboo) print("q_bamboo: " + old.q_bamboo + " -> " + current.q_bamboo);
     if(old.q_shimeji != current.q_shimeji) print("q_shimeji: " + old.q_shimeji + " -> " + current.q_shimeji);
 }
