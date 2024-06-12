@@ -1,6 +1,6 @@
 // Made by Biksel
 // asl-help by ero (https://github.com/just-ero/asl-help/)
-// Thanks to Daemonweave and math for helping test
+// Thanks to Daemonweave and math for helping testr
 
 state("SWORN") {}
 
@@ -77,10 +77,10 @@ start {
 }
 
 split {
-    return (settings["split"] && settings["split_room"] && old.loadingScene != current.loadingScene && !vars.ignored.Contains(current.loadingScene) ||
+    return (settings["split_room"] && old.loadingScene != current.loadingScene && !vars.ignored.Contains(current.loadingScene) ||
             //settings["split"] && settings["split_boss"] && (old.levelCompleted == 6 && current.levelCompleted == 7 || old.levelCompleted == 15 && current.levelCompleted == 16) ||
-            settings["split"] && settings["split_boss"] && !settings["split_room"] && vars.bossArenas.Contains(old.activeScene) && old.activeScene != current.activeScene && !current.finished||
-            settings["split"] && settings["split_end"] && !old.finished && current.finished && current.levelCompleted == 28);
+            settings["split_boss"] && !settings["split_room"] && vars.bossArenas.Contains(old.activeScene) && old.activeScene != current.activeScene && !current.finished||
+            settings["split_end"] && !old.finished && current.finished && current.levelCompleted == 28);
 }
 
 reset {
