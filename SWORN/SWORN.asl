@@ -1,3 +1,7 @@
+// Made by Biksel
+// asl-help by ero (https://github.com/just-ero/asl-help/)
+// Thanks to Daemonweave and math for helping test
+
 state("SWORN") {}
 
 startup {
@@ -5,7 +9,7 @@ startup {
     vars.Helper.LoadSceneManager = true;
     vars.Helper.AlertGameTime();
 
-    settings.Add("split", true, "Split after: ");
+    settings.Add("split", true, "Split after: (Only Boss & Finish recommended)");
     settings.Add("split_room", false, "Every room", "split");
     settings.Add("split_boss", true, "Only Boss arenas", "split");
     settings.Add("split_end", true, "Finish", "split");
@@ -26,8 +30,17 @@ init {
     vars.bossArenas = new List<string>() {
         "Kingswood - Bane Of Crows Arena (level scene)",
         "Kingswood - Questing Beast Arena (level scene)",
-        "Kingswood - Gawain Arena Final (level scene)"
+        "Kingswood - Gawain Arena Final (level scene)",
+        "Cornucopia - Mauler Rat Arena (level scene)",
+        "Cornucopia - Raving Blight Arena (level scene)",
+        "Cornucopia - Percival Arena (level scene)"
     };
+
+    vars.ignored = new List<string>() {
+        "Kingswood - Intro (level scene)",
+        "Hub Area (level scene)"
+    };
+
 }
 
 update {
@@ -48,10 +61,14 @@ update {
 }
 
 onSplit {
-    vars.lastCompleted++;
+    vars.lastCompleted = current.levelCompleted;
 }
 
 onStart {
+    vars.lastCompleted = 0;
+}
+
+onReset {
     vars.lastCompleted = 0;
 }
 
@@ -60,9 +77,9 @@ start {
 }
 
 split {
-    return (settings["split"] && settings["split_room"] && old.levelCompleted != current.levelCompleted && current.levelCompleted - vars.lastCompleted == 1 ||
+    return (settings["split"] && settings["split_room"] && old.loadingScene != current.loadingScene && !vars.ignored.Contains(current.loadingScene) ||
             //settings["split"] && settings["split_boss"] && (old.levelCompleted == 6 && current.levelCompleted == 7 || old.levelCompleted == 15 && current.levelCompleted == 16) ||
-            settings["split"] && settings["split_boss"] && vars.bossArenas.Contains(old.activeScene) && old.activeScene != current.activeScene && !current.finished||
+            settings["split"] && settings["split_boss"] && !settings["split_room"] && vars.bossArenas.Contains(old.activeScene) && old.activeScene != current.activeScene && !current.finished||
             settings["split"] && settings["split_end"] && !old.finished && current.finished && current.levelCompleted == 28);
 }
 
