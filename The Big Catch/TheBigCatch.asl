@@ -31,6 +31,7 @@ init {
     });
 
     vars.splitTimer = new Stopwatch();
+    vars.queueSplit = false;
 }
 
 update {
@@ -38,14 +39,17 @@ update {
     //if(old.paused != current.paused) print("Paused: " + old.paused + " -> " + current.paused);
     //if(old.fileTime != current.fileTime) print("fileTime: " + old.fileTime + " -> " + current.fileTime);
 
-    if (vars.splitTimer.ElapsedMilliseconds > 520) vars.splitTimer.Reset();
+    if (vars.splitTimer.ElapsedMilliseconds > 1000) vars.splitTimer.Reset();
 
     if(old.captures != current.captures) print("captures: " + old.captures + " -> " + current.captures);
-    if(old.turnedIn != current.turnedIn) { vars.splitTimer.Start(); print("turnedIn: " + old.turnedIn + " -> " + current.turnedIn); }
+    if(old.turnedIn != current.turnedIn) print("turnedIn: " + old.turnedIn + " -> " + current.turnedIn);
     if(old.active != current.active) print("active: " + old.active + " -> " + current.active);
     if(old.newSave != current.newSave) print("newSave: " + old.newSave + " -> " + current.newSave);
 
-    //print(current.newSave + "");
+    if (vars.splitTimer.ElapsedMilliseconds > 0 ) print(vars.splitTimer.ElapsedMilliseconds + "");
+    print((old.turnedIn == 9 && current.turnedIn == 10) + "");
+
+    if ((old.turnedIn == 9 && current.turnedIn == 10) || (old.turnedIn == 25 && current.turnedIn == 26)) { vars.queueSplit = true; vars.splitTimer.Start(); }
 }
 
 onStart {
@@ -54,6 +58,7 @@ onStart {
 
 onSplit {
     vars.splitTimer.Reset();
+    vars.queueSplit = false;
 }
 
 start {
@@ -62,7 +67,7 @@ start {
 
 split {
     return (current.captures - old.captures == 1 && settings["split_capture"]) ||
-            (settings["split_10"] && old.turnedIn == 9 && current.turnedIn == 10 && vars.splitTimer.ElapsedMilliseconds > 516) ||
+            (settings["split_10"] && vars.queueSplit && vars.splitTimer.ElapsedMilliseconds > 516) ||
             (settings["split_26"] && old.turnedIn == 25 && current.turnedIn == 26 && vars.splitTimer.ElapsedMilliseconds > 516)||
             (settings["split_scales"] && old.active != current.active && current.active == current.trad && current.active != 0);
 }
