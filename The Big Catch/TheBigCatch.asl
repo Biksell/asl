@@ -47,7 +47,7 @@ update {
     if(old.newSave != current.newSave) print("newSave: " + old.newSave + " -> " + current.newSave);
 
     if (vars.splitTimer.ElapsedMilliseconds > 0 ) print(vars.splitTimer.ElapsedMilliseconds + "");
-    print((old.turnedIn == 9 && current.turnedIn == 10) + "");
+    //print((old.turnedIn == 9 && current.turnedIn == 10) + "");
 
     if ((old.turnedIn == 9 && current.turnedIn == 10) || (old.turnedIn == 25 && current.turnedIn == 26)) { vars.queueSplit = true; vars.splitTimer.Start(); }
 }

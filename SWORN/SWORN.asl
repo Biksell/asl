@@ -41,6 +41,9 @@ init {
         "Hub Area (level scene)"
     };
 
+    current.activeScene = "";
+    current.loadingScene = "";
+
 }
 
 update {
@@ -49,7 +52,6 @@ update {
 
     if(old.activeScene != current.activeScene) print("Active: " + old.activeScene + "->" + current.activeScene);
     if(old.loadingScene != current.loadingScene) print("Loading: " + old.loadingScene + "->" + current.loadingScene);
-
 
     if(old.finished != current.finished) print("finished: " + old.finished + " -> " + current.finished);
     if(old.finalLevels != current.finalLevels) print("levelCompleted: " + old.finalLevels + " -> " + current.finalLevels);

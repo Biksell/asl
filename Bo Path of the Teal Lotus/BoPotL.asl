@@ -52,17 +52,18 @@ init {
         vars.Helper["OnDemoVideo"] = mono.Make<bool>("UICache", "Instance", "OnDemoVideo");
         return true;
     });
+
+    current.activeScene = "";
+    current.loadingScene = "";
 }
 
 update {
-    try {
-        current.activeScene = vars.Helper.Scenes.Active.Name ?? current.activeScene;
-        current.loadingScene = vars.Helper.Scenes.Loaded[0].Name ?? current.loadingScene;
+    current.activeScene = vars.Helper.Scenes.Active.Name ?? current.activeScene;
+    current.loadingScene = vars.Helper.Scenes.Loaded[0].Name ?? current.loadingScene;
 
-        if(old.activeScene != current.activeScene) print(old.activeScene + "->" + current.activeScene);
-        if(old.loadingScene != current.loadingScene) print(old.loadingScene + "->" + current.loadingScene);
-    } catch (System.Exception) {
-    }
+    if(old.activeScene != current.activeScene) print(old.activeScene + "->" + current.activeScene);
+    if(old.loadingScene != current.loadingScene) print(old.loadingScene + "->" + current.loadingScene);
+
 
     //if(old.AsahiDefeated != current.AsahiDefeated) print("AsahiDefeated: " + old.AsahiDefeated + " -> " + current.AsahiDefeated);
     //if(old.DefeatedJorogumo != current.DefeatedJorogumo) print("DefeatedJorogumo: " + old.DefeatedJorogumo + " -> " + current.DefeatedJorogumo);
