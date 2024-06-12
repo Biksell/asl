@@ -84,7 +84,7 @@ split {
 }
 
 reset {
-    return old.activeScene != current.activeScene && current.activeScene == "Hub Area (level scene)";
+    return settings["reset"] && old.activeScene != current.activeScene && current.activeScene == "Hub Area (level scene)";
 }
 
 gameTime {
