@@ -44,14 +44,12 @@ init {
 }
 
 update {
-    try {
-        current.activeScene = vars.Helper.Scenes.Active.Name ?? current.activeScene;
-        current.loadingScene = vars.Helper.Scenes.Loaded[0].Name ?? current.loadingScene;
+    current.activeScene = vars.Helper.Scenes.Active.Name ?? current.activeScene;
+    current.loadingScene = vars.Helper.Scenes.Loaded[0].Name ?? current.loadingScene;
 
-        if(old.activeScene != current.activeScene) print("Active: " + old.activeScene + "->" + current.activeScene);
-        if(old.loadingScene != current.loadingScene) print("Loading: " + old.loadingScene + "->" + current.loadingScene);
-    } catch (System.Exception) {
-    }
+    if(old.activeScene != current.activeScene) print("Active: " + old.activeScene + "->" + current.activeScene);
+    if(old.loadingScene != current.loadingScene) print("Loading: " + old.loadingScene + "->" + current.loadingScene);
+
 
     if(old.finished != current.finished) print("finished: " + old.finished + " -> " + current.finished);
     if(old.finalLevels != current.finalLevels) print("levelCompleted: " + old.finalLevels + " -> " + current.finalLevels);
