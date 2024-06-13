@@ -57,10 +57,6 @@ update {
     if(old.finalLevels != current.finalLevels) print("levelCompleted: " + old.finalLevels + " -> " + current.finalLevels);
     if(old.levelCompleted != current.levelCompleted) print("levelCompleted: " + old.levelCompleted + " -> " + current.levelCompleted);
 
-
-    vars.Helper.Texts["depth"].Left = "Depth: ";
-    vars.Helper.Texts["depth"].Right = current.levelCompleted + "";
-
     //print(current.GameTime + "");
 }
 
