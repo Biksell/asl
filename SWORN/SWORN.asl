@@ -14,6 +14,7 @@ startup {
     settings.Add("split_boss", true, "Only Boss arenas", "split");
     settings.Add("split_end", true, "Finish", "split");
     settings.Add("reset", true, "Reset on returning to hub");
+    settings.Add("counter", false, "Show room counter");
 }
 
 init {
@@ -24,8 +25,6 @@ init {
         vars.Helper["levelCompleted"] = mono.Make<int>("ScoreboardUI", "Instance", "playerStatsManager", "levelCompleted");
         return true;
     });
-
-    vars.lastCompleted = 0;
 
     vars.bossArenas = new List<string>() {
         "Kingswood - Bane Of Crows Arena (level scene)",
@@ -44,6 +43,8 @@ init {
     current.activeScene = "";
     current.loadingScene = "";
 
+    vars.rooms = 0;
+
 }
 
 update {
@@ -57,19 +58,25 @@ update {
     if(old.finalLevels != current.finalLevels) print("levelCompleted: " + old.finalLevels + " -> " + current.finalLevels);
     if(old.levelCompleted != current.levelCompleted) print("levelCompleted: " + old.levelCompleted + " -> " + current.levelCompleted);
 
-    //print(current.GameTime + "");
+    if (settings["counter"] && old.loadingScene != current.loadingScene && !vars.ignored.Contains(current.loadingScene)) {
+        vars.rooms++;
+        vars.Helper.Texts["counter"].Right = vars.rooms + "";
+    }
 }
 
-onSplit {
-    vars.lastCompleted = current.levelCompleted;
-}
 
 onStart {
-    vars.lastCompleted = 0;
+    vars.rooms = 1;
+    if (settings["counter"]) {
+        vars.Helper.Texts["counter"].Left = "Room: ";
+        vars.Helper.Texts["counter"].Right = vars.rooms + "";
+    }
+    else if (!settings["counter"]) vars.Helper.Texts.Remove("counter");
 }
 
 onReset {
-    vars.lastCompleted = 0;
+    vars.rooms = 0;
+    vars.Helper.Texts["counter"].Right = vars.rooms + "";
 }
 
 start {
