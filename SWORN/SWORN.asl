@@ -80,7 +80,7 @@ split {
     return (settings["split_room"] && old.loadingScene != current.loadingScene && !vars.ignored.Contains(current.loadingScene) ||
             //settings["split"] && settings["split_boss"] && (old.levelCompleted == 6 && current.levelCompleted == 7 || old.levelCompleted == 15 && current.levelCompleted == 16) ||
             settings["split_boss"] && !settings["split_room"] && vars.bossArenas.Contains(old.activeScene) && old.activeScene != current.activeScene && !current.finished||
-            settings["split_end"] && !old.finished && current.finished && current.levelCompleted == 28);
+            settings["split_end"] && current.finished && current.levelCompleted == 28 && current.activeScene == "Cornucopia - Percival Arena (level scene)");
 }
 
 reset {
