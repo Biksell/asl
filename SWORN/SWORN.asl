@@ -57,6 +57,10 @@ update {
     if(old.finalLevels != current.finalLevels) print("levelCompleted: " + old.finalLevels + " -> " + current.finalLevels);
     if(old.levelCompleted != current.levelCompleted) print("levelCompleted: " + old.levelCompleted + " -> " + current.levelCompleted);
 
+
+    vars.Helper.Texts["depth"].Left = "Depth: ";
+    vars.Helper.Texts["depth"].Right = current.levelCompleted + "";
+
     //print(current.GameTime + "");
 }
 
@@ -80,7 +84,7 @@ split {
     return (settings["split_room"] && old.loadingScene != current.loadingScene && !vars.ignored.Contains(current.loadingScene) ||
             //settings["split"] && settings["split_boss"] && (old.levelCompleted == 6 && current.levelCompleted == 7 || old.levelCompleted == 15 && current.levelCompleted == 16) ||
             settings["split_boss"] && !settings["split_room"] && vars.bossArenas.Contains(old.activeScene) && old.activeScene != current.activeScene && !current.finished||
-            settings["split_end"] && current.finished && current.levelCompleted == 28 && current.activeScene == "Cornucopia - Percival Arena (level scene)");
+            settings["split_end"] && current.finished && current.levelCompleted == 28 && ((!old.finished && current.finished) || (old.levelCompleted < current.levelCompleted)) && current.activeScene == "Cornucopia - Percival Arena (level scene)");
 }
 
 reset {
