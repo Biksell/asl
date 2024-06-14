@@ -76,7 +76,7 @@ onStart {
 
 onReset {
     vars.rooms = 0;
-    vars.Helper.Texts["counter"].Right = vars.rooms + "";
+    if (settings["counter"]) vars.Helper.Texts["counter"].Right = vars.rooms + "";
 }
 
 start {
