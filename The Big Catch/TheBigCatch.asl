@@ -49,7 +49,7 @@ update {
     if (vars.splitTimer.ElapsedMilliseconds > 0 ) print(vars.splitTimer.ElapsedMilliseconds + "");
     //print((old.turnedIn == 9 && current.turnedIn == 10) + "");
 
-    if ((old.turnedIn == 9 && current.turnedIn == 10) || (old.turnedIn == 25 && current.turnedIn == 26)) { vars.queueSplit = true; vars.splitTimer.Start(); }
+    if ((old.turnedIn == 9 && current.turnedIn == 10 && settings["split_10"]) || (old.turnedIn == 25 && current.turnedIn == 26 && settings["split_26"])) { vars.queueSplit = true; vars.splitTimer.Start(); }
 }
 
 onStart {
@@ -68,7 +68,7 @@ start {
 split {
     return (current.captures - old.captures == 1 && settings["split_capture"]) ||
             (settings["split_10"] && vars.queueSplit && vars.splitTimer.ElapsedMilliseconds > 516) ||
-            (settings["split_26"] && old.turnedIn == 25 && current.turnedIn == 26 && vars.splitTimer.ElapsedMilliseconds > 516)||
+            (settings["split_26"] && vars.queueSplit && vars.splitTimer.ElapsedMilliseconds > 516)||
             (settings["split_scales"] && old.active != current.active && current.active == current.trad && current.active != 0);
 }
 
