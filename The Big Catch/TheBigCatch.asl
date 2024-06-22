@@ -1,5 +1,5 @@
 // Made by Biksel
-// thanks to rythin for reliable resets
+// thanks to rythin for reliable resets, Frank for updating the start after the cutscene was added
 // asl-help by ero (https://github.com/just-ero/asl-help/)
 
 state("The Big Catch Tacklebox") {}
@@ -27,6 +27,8 @@ init {
         vars.Helper["newSave"] = mono.Make<bool>("Manager", "_instance", "_saveManager", "_currentSaveData", "_newSave");
         vars.Helper["active"] = mono.Make<int>("Manager", "_instance", "_primaryPlayerMachine", "_characterArt", "_currentOutfit");
         vars.Helper["trad"] = mono.Make<int>("Manager", "_instance", "_primaryPlayerMachine", "_characterArt", "_traditionalOutfit");
+        vars.Helper["cutscene"] = mono.Make<bool>("Manager", "_instance", "_cutsceneCoordinator", "_cutscenePlaying", "_value");
+        vars.Helper["coins"] = mono.Make<int>("Manager", "_instance", "_saveManager", "_currentSaveData", "_cachedCurrentCoinCount");
         return true;
     });
 
@@ -62,7 +64,7 @@ onSplit {
 }
 
 start {
-    return old.fileTime < 0.0001f && current.fileTime > 0 && current.fileTime < 1f && settings["start"];
+    return  old.cutscene && !current.cutscne && current.captures == 0 && current.coins == 0 && settings["start"];
 }
 
 split {
