@@ -64,7 +64,7 @@ onSplit {
 }
 
 start {
-    return  old.cutscene && !current.cutscne && current.captures == 0 && current.coins == 0 && settings["start"];
+    return  old.cutscene && !current.cutscene && current.captures == 0 && current.coins == 0 && settings["start"];
 }
 
 split {
