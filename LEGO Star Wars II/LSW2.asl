@@ -18,10 +18,10 @@ state("Dolphin") {
 startup {
 
     settings.Add("startNew", true, "Start on New Game");
+    settings.Add("startDestiny", false, "Start on entering Jedi Destiny (Free Play)");
     settings.Add("split", true, "Split: ");
     settings.Add("splitStatus", true, "Split on status screen", "split");
     settings.Add("splitBespinCS", true, "Split on Bespin ending cutscene", "split");
-    settings.Add("startDestiny", false, "Start on entering Jedi Destiny (Free Play)", "split");
 
     var type = Assembly.Load(File.ReadAllBytes("Components/emu-help-v2")).GetType("GCN");
     vars.Helper = Activator.CreateInstance(type, args: false);
