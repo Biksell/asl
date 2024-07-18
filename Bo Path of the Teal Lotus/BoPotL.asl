@@ -20,6 +20,7 @@ startup {
 
     vars.splitConditions = new HashSet<string>();
 
+    settings.Add("demo", true, "[DEMO SETTINGS]");
     settings.Add("start", true, "Start after spawning in a new game");
     settings.Add("split_area", true, "Split on entering: ");
     foreach(var area in vars.Areas) {
