@@ -67,19 +67,23 @@ startup {
         }
     }
 
-    //vars.startDelay = new Stopwatch();
+    vars.doubleSplit = new Stopwatch();
 }
 
 onStart {
     vars.changeCount = 0;
     vars.level = 1;
-    //vars.startDelay.Reset();
+}
+
+onSplit {
+    vars.doubleSplit.Start();
 }
 
 update {
     if (old.uiElementChange && !current.uiElementChange) {
         print(vars.changeCount + " -> " + vars.changeCount++);
     }
+    if (vars.doubleSplit.ElapsedMilliseconds > 1500) vars.doubleSplit.Reset();
     //if (settings["freeplay"] && old.loading2 && !current.loading2) vars.startDelay.Start();
     //if (vars.startDelay.ElapsedMilliseconds > 100) vars.startDelay.Reset();
     //print(current.inLevel + ", " + current.loading2);
@@ -102,6 +106,7 @@ start {
 }
 
 split {
+    if (vars.doubleSplit.IsRunning) return false;
     if (settings["split_status"] && current.status && !old.status) return true;
     if (settings["split_continue"] && !settings["1_1_0studs"] && vars.level == 1 && vars.changeCount >= 1) {
         if (vars.changeCount == 1 && !settings["1_1_0studs"]) return false;
