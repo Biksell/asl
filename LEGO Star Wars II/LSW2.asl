@@ -3,6 +3,7 @@
 
 state("LegoStarWarsII", "PC") {
     int load: 0x26A26C;
+    int endLoad: 0x24F394;
     int cutscene: 0x262044;
     //bool status: 0x269A90; //unstable
     byte status: 0x24F389;
@@ -41,7 +42,7 @@ init {
 }
 
 isLoading {
-    return current.load == 1;
+    return current.load == 1 || current.endLoad == 1;
 }
 
 update {
@@ -54,21 +55,12 @@ update {
         current.cutscene = vars.Helper["cutscene"].Current;
         current.load = vars.Helper["load"].Current;
     }
-    if (old.load != current.load) {
-        print("load: " + old.load + " -> " + current.load);
-    }
-    if (old.cutscene != current.cutscene){
-        print("cutscene: " + old.cutscene + " -> " + current.cutscene);
-    }
-    if (old.status != current.status){
-        print("status: " + old.status + " -> " + current.status);
-    }
-    if (old.levelBuffer != current.levelBuffer){
-        print("levelBuffer: " + old.levelBuffer + " -> " + current.levelBuffer);
-    }
-    if (old.newgame != current.newgame){
-        print("newgame: " + old.newgame + " -> " + current.newgame);
-    }
+    if (old.load != current.load) print("load: " + old.load + " -> " + current.load);
+    if (old.cutscene != current.cutscene) print("cutscene: " + old.cutscene + " -> " + current.cutscene);
+    if (old.status != current.status) print("status: " + old.status + " -> " + current.status);
+    if (old.levelBuffer != current.levelBuffer) print("levelBuffer: " + old.levelBuffer + " -> " + current.levelBuffer);
+    if (old.newgame != current.newgame) print("newgame: " + old.newgame + " -> " + current.newgame);
+    if (old.endLoad != current.endLoad) print("endLoad: " + old.endLoad + " -> " + current.endLoad);
 }
 
 start {
