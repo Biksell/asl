@@ -41,8 +41,7 @@ state("LEGOStarWarsSaga", "TCS") {
     int alttab: 0x00427610;
 }
 
-state("LEGOIndy", "LIJ1")
-{
+state("LEGOIndy", "LIJ1") {
     int stream : 0x6CC944;
     bool Loading: 0x5C3D24;
     bool Loading2: 0x6CC7A8;
@@ -62,29 +61,84 @@ state("LEGOIndy2", "LIJ2") {
     bool Load3: 0xC5B838;
 }
 
-state("LEGOHarryPotter", "1-4")
-{
+state("LEGOHarryPotter", "1-4") {
     bool Loading: 0xA28510;
 }
 
-
-state("LEGOPirates", "POTC")
-{
+state("LEGOPirates", "POTC") {
     bool Loading: 0xA171A4;
 }
 
-state("harry2", "5-7")
-{
+state("harry2", "5-7") {
     bool isLoading: 0xC59978;
+}
+
+// END OF GRUNT%
+
+state("LEGOlotr", "LOTR") {
+    bool isLoading : 0x11BD09E;
+}
+
+state("LEGOLCUR_DX11", "LCU") {
+	bool Load: 0x1C6C2AC;
+	bool Status: 0x1175BE0, 0x18, 0x18, 0xF8, 0x38, 0x18, 0x860, 0x60, 0x158;
+}
+
+state("LEGOMARVEL", "LMSH1") {
+    bool CornerLoads: 0x015B3BA8, 0x34, 0x20, 0xC, 0x30, 0x3C, 0x40, 0x64;
+    bool IntoHub: 0x015665B0, 0x24, 0x18, 0x34, 0x34, 0x18, 0xC, 0x844;
+    bool OpenGame: 0x1013F14;
+    bool Fade: 0x1105C28;
+    bool Fade2: 0x15B095C;
+}
+
+state("LEGOEMMET", "LM1") {
+    bool Load: 0x16C04E4;
+}
+
+state ("LEGOJurassicWorld_DX11", "LJW"){
+    bool Load: 0x2248474;
+    bool Status: 0x02203750, 0x174;
+}
+
+state ("LEGOSWTFA_DX11", "TFA") {
+    int Status: 0x027AA540, 0x60, 0x30, 0x30, 0x60, 0x48, 0x20, 0x468;
+    int Load: 0x2786794;
+}
+
+state ("LEGONINJAGO_DX11", "LNMVG"){
+    bool Loading: 0x245ADF0;
+}
+
+state("LEGOMARVEL2_DX11", "LMSH2") {
+    bool AntiLoading: 0x2BC4C4C;
+}
+
+state ("LEGO The Incredibles_DX11", "LTI") {
+    bool Load: 0x2BF395C;
+    bool Load2: 0x02AA0E48, 0xB8, 0x18, 0x30, 0x0, 0x60, 0x70, 0x168;
+    int Status: 0x02A6AC08, 0xB8;
+}
+
+state("LEGO DC Super-villains_DX11", "DCSV") {
+    bool Status : 0x2DB02B0;
+    bool Load : 0x2C3AB8C;
+}
+
+state("LEGOSTARWARSSKYWALKERSAGA_DX11", "TSS") {
+    byte load: 0x05D8D850, 0xD8, 0x40, 0x10, 0x58, 0xB0, 0x0, 0x1B8;
+    byte loads: 0x05D9E1A8, 0xC8, 0x10, 0x50, 0x60, 0x38, 0x30, 0xE0;
 }
 
 startup {}
 
 init {
     // TCS
-    vars.inCantine = false;
-    vars.versions = new string[]{"LSW1", "LSW2", "TCS", "LIJ1", "LB1",
-                                "LIJ2", "1-4", "POTC", "5-7"};
+    vars.inCantina = false;
+
+    // LTI
+    vars.statusDelay = new Stopwatch();
+    //vars.versions = new string[]{"LSW1", "LSW2", "TCS", "LIJ1", "LB1", "LIJ2", "1-4", "POTC", "5-7"};
 }
 
 update {
@@ -96,6 +150,10 @@ update {
             if (current.room != 325) {
                 vars.inCantina = true;
             }
+            break;
+        case "LEGO The Incredibles_DX11":
+            if (old.Status == 1 && current.Status == 0) vars.statusDelay.Start();
+            if (vars.statusDelay.ElapsedMilliseconds > 2000) vars.statusDelay.Reset();
             break;
     }
 }
@@ -119,9 +177,31 @@ isLoading{
             return current.Load1 || current.Load2 || current.Load3;
         case "LEGOHarryPotter": //1-4
             return current.Loading;
-        case "harry2": //5-7
-            return current.isLoading;
         case "LEGOPirates": //POTC
             return current.Loading;
+        case "harry2": //5-7
+            return current.isLoading;
+        case "LEGOlotr": // LOTR
+            return current.isLoading;
+        case "LEGOLCUR_DX11": // LCU
+            return !current.Load && !current.Status;
+        case "LEGOMARVEL": // LMSH1
+            return current.CornerLoads || current.IntoHub || current.OpenGame || current.Fade || current.Fade2;
+        case "LEGOEMMET":
+            return !current.Load;
+        case "LEGOJurassicWorld_DX11":
+            return !current.Load && !current.Status;
+        case "LEGOSWTFA_DX11":
+            return current.Load == 0 && current.Status != 1 || current.Load != 0 && current.Status == 1;
+        case "LEGONINJAGO_DX11":
+            return current.Loading;
+        case "LEGOMARVEL2_DX11":
+            return !current.AntiLoading;
+        case "LEGO The Incredibles_DX11":
+            return !current.Load && current.Status == 0 && !vars.statusDelay.IsRunning;
+        case "LEGO DC Super-villains_DX11":
+            return !current.Load && !current.Status;
+        case "LEGOSTARWARSSKYWALKERSAGA_DX11":
+            return current.load == 1 && current.loads == 1;
     }
 }
