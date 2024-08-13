@@ -26,6 +26,7 @@ state("LegoStarwars", "LSW1") {}
 
 state("LegoStarWarsII", "LSW2") {
     int load: 0x26A26C;
+    int endLoad: 0x24F394;
 }
 
 state("LEGOStarWarsSaga", "TCS") {
@@ -104,7 +105,7 @@ isLoading{
         case "LegoStarwars": //LSW1
             return false;
         case "LegoStarWarsII": //LSW2
-            return current.load == 1;
+            return current.load == 1 || current.endLoad == 1;
         case "LEGOStarWarsSaga": //TCS
             return ((current.gameReboot == 10000) ||
                     ((current.transition == 1) && (old.pause == 0) && (current.areaID != 66) && (current.inCrawl == 0)) ||
