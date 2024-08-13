@@ -1,6 +1,6 @@
 /*
 Multiple LEGO Games- autosplitter
-Supports Grunt% load removal
+Supports load removal for most mainline TT LEGO games
 
 !! IMPORTANT !!
 IF YOU WANT TO HAVE MULTIPLE GAMES OPEN AT ONCE AND HAVE WORKING LOAD REMOVAL,
