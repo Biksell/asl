@@ -79,5 +79,5 @@ shutdown {
 }
 
 exit {
-    timer.IsGameTimePaused = true;
+    timer.IsGameTimePaused = false;
 }

@@ -27,3 +27,7 @@ split
 isLoading {
     return current.load != 0;
 }
+
+exit {
+    timer.IsGameTimePaused = false;
+}
