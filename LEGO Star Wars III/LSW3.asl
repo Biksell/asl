@@ -8,10 +8,24 @@ state("LEGOCloneWars")
     byte newgame : 0xA6DF90;
     byte newgamet : 0xA6DFA2;
     byte load: 0xB80F85;
+    byte dynLoad1: 0x8F05C4;
+    byte dynLoad2: 0x8F0834;
+    bool gameplay: 0xA0EF50, 0x108, 0x8AC;
+    bool windowFocused: 0xA128F4;
+    float igt: 0xAB4CA0;
+}
+
+startup {
+    vars.altTab = new Stopwatch();
 }
 
 update {
     if (old.load != current.load) print("load: " + old.load + " -> " + current.load);
+    if (old.gameplay != current.gameplay) print("gameplay: " + old.gameplay + " -> " + current.gameplay);
+    if (current.load != 0 && !current.gameplay && !vars.altTab.IsRunning) print("Loading");
+    if (old.windowFocused != current.windowFocused) vars.altTab.Restart();
+    if (vars.altTab.ElapsedMilliseconds > 2000) vars.altTab.Reset();
+    //if (current.paused == 255 && current.inMenu == 255 && current.inMenu2 == 255) print("In menu");
 }
 
 start
@@ -25,7 +39,7 @@ split
 }
 
 isLoading {
-    return current.load != 0;
+    return current.load != 0 && !current.gameplay && !vars.altTab.IsRunning;
 }
 
 exit {
