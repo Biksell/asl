@@ -24,7 +24,7 @@ update {
     if (old.gameplay != current.gameplay) print("gameplay: " + old.gameplay + " -> " + current.gameplay);
     if (current.load != 0 && !current.gameplay && !vars.altTab.IsRunning) print("Loading");
     if (old.windowFocused != current.windowFocused) vars.altTab.Restart();
-    if (vars.altTab.ElapsedMilliseconds > 2000) vars.altTab.Reset();
+    if (vars.altTab.ElapsedMilliseconds > 1000) vars.altTab.Reset();
     //if (current.paused == 255 && current.inMenu == 255 && current.inMenu2 == 255) print("In menu");
 }
 
