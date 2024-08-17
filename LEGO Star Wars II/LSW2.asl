@@ -18,8 +18,10 @@ state("Dolphin") {
 
 startup {
 
-    settings.Add("startNew", true, "Start on New Game");
-    settings.Add("startDestiny", false, "Start on entering Jedi Destiny (Free Play)");
+    settings.Add("start", true, "Start:");
+    settings.Add("startNew", true, "New Game", "start");
+    settings.Add("startDestiny", false, "Jedi Destiny (Free Play)", "start");
+    settings.Add("startSecret", false, "Secret Plans (Red Brick Rush)", "start");
     settings.Add("split", true, "Split: ");
     settings.Add("splitStatus", true, "Split on status screen", "split");
     settings.Add("splitBespinCS", true, "Split on Bespin ending cutscene", "split");
@@ -65,7 +67,8 @@ update {
 
 start {
     return (settings["startNew"] && old.newgame == 0 && current.newgame == 1 && current.status == 255) ||
-        (settings["startDestiny"] && old.load == 1 && current.load == 0 && current.levelBuffer == "Fight_A\\EmperorF");
+            (settings["startDestiny"] && old.load == 1 && current.load == 0 && current.levelBuffer == "Fight_A\\EmperorF")||
+            (settings["startSecret"] && old.load == 1 && current.load == 0 && current.levelBuffer == "adeRunner_A\\Bloc");
 }
 
 split {
