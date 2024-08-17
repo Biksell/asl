@@ -21,7 +21,7 @@ startup {
     settings.Add("start", true, "Start:");
     settings.Add("startNew", true, "New Game", "start");
     settings.Add("startDestiny", false, "Jedi Destiny (Free Play)", "start");
-    settings.Add("startSecret", false, "Secret Plans (Red Brick Rush)", "start");
+    settings.Add("startSecret", false, "Secret Plans (Minikit Rush)", "start");
     settings.Add("split", true, "Split: ");
     settings.Add("splitStatus", true, "Split on status screen", "split");
     settings.Add("splitBespinCS", true, "Split on Bespin ending cutscene", "split");
