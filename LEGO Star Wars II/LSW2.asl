@@ -39,12 +39,13 @@ init {
         emu.Make<byte>("newgame", 0x80400BA3);
         emu.Make<int>("cutscene", 0x80401448);
         emu.Make<int>("load", 0x80400D5C);
+        emu.Make<int>("endload", 0x80400D5C);
         return true;
     });
 }
 
 isLoading {
-    return current.load == 1 || current.endLoad == 1;
+    if (!vars.isEmu) return current.load == 1 || current.endLoad == 1;
 }
 
 update {
@@ -62,7 +63,7 @@ update {
     if (old.status != current.status) print("status: " + old.status + " -> " + current.status);
     if (old.levelBuffer != current.levelBuffer) print("levelBuffer: " + old.levelBuffer + " -> " + current.levelBuffer);
     if (old.newgame != current.newgame) print("newgame: " + old.newgame + " -> " + current.newgame);
-    if (old.endLoad != current.endLoad) print("endLoad: " + old.endLoad + " -> " + current.endLoad);
+    if (!vars.isEmu) if (old.endLoad != current.endLoad) print("endLoad: " + old.endLoad + " -> " + current.endLoad);
 }
 
 start {
