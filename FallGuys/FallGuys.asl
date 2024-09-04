@@ -1,5 +1,5 @@
 // Fall Guys autosplitter by Biksel
-// Uses the log file found
+// Uses the log file found at
 
 // Can't attach to game because of EasyAntiCheat
 state("LiveSplit") {}
@@ -19,7 +19,7 @@ init {
     vars.collecting = false;
     vars.canStart = false;
     vars.endString = "";
-    vars.loading = false;
+    //vars.loading = false;
 }
 
 update {
@@ -28,8 +28,8 @@ update {
         //print(current.raw[0] + "");
 
         // Loading
-        if (current.raw.Contains("Changing state from Countdown to Playing")) vars.loading = false;
-        if (current.raw.Contains("[GameSession] Changing state from Playing to GameOver")) vars.loading = true;
+        //if (current.raw.Contains("Changing state from Countdown to Playing")) vars.loading = false;
+        //if (current.raw.Contains("[GameSession] Changing state from Playing to GameOver")) vars.loading = true;
 
         // First game
         if (current.raw.Contains("Found game on ->")) vars.firstGame = true;
@@ -58,7 +58,7 @@ split {
 }
 
 isLoading {
-    return vars.loading;
+    //return vars.loading;
 }
 
 onStart {
