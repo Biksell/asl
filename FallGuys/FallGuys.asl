@@ -23,6 +23,7 @@ init {
 }
 
 update {
+    //print(timer.CurrentPhase + "");
     current.raw = vars.reader.ReadLine();
     if (!String.IsNullOrEmpty(current.raw) && old.raw != current.raw) {
         //print(current.raw[0] + "");
@@ -33,8 +34,8 @@ update {
 
         // First game
         if (current.raw.Contains("Found game on ->")) vars.firstGame = true;
-        if (current.raw.Contains("[GameSession] Changing state from Playing to GameOver")) vars.firstGame = false;
-        if (vars.firstGame && current.raw.Contains("Changing state from Countdown to Playing")) vars.canStart = true;
+        if (current.raw.Contains("Changing state from Playing")) vars.firstGame = false;
+        if (vars.firstGame && current.raw.Contains("Changing state from Countdown to Playing") && timer.CurrentPhase != TimerPhase.Running) vars.canStart = true;
 
         // End
         if (current.raw.Contains("== [CompletedEpisodeDto] ==")) { vars.collecting = true; vars.endString = ""; }
