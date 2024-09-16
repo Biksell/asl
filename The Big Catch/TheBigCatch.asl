@@ -9,7 +9,7 @@ startup {
 
     settings.Add("start", true, "Start on spawn");
     settings.Add("split_capture", true, "Split on capturable");
-    settings.Add("split_whistle", false, "Split on acquiring the whistle")
+    settings.Add("split_whistle", false, "Split on acquiring the whistle");
     settings.Add("categories", true, "Categories: ");
     settings.Add("split_10", true, "Split on returning 10 fish", "categories");
     settings.Add("split_26", false, "Split on returning 26 fish (All Fish)", "categories");
