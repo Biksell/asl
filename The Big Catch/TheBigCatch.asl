@@ -9,6 +9,7 @@ startup {
 
     settings.Add("start", true, "Start on spawn");
     settings.Add("split_capture", true, "Split on capturable");
+    settings.Add("split_whistle", false, "Split on acquiring the whistle")
     settings.Add("categories", true, "Categories: ");
     settings.Add("split_10", true, "Split on returning 10 fish", "categories");
     settings.Add("split_26", false, "Split on returning 26 fish (All Fish)", "categories");
@@ -29,6 +30,7 @@ init {
         vars.Helper["trad"] = mono.Make<int>("Manager", "_instance", "_primaryPlayerMachine", "_characterArt", "_traditionalOutfit");
         vars.Helper["cutscene"] = mono.Make<bool>("Manager", "_instance", "_cutsceneCoordinator", "_cutscenePlaying", "_value");
         vars.Helper["coins"] = mono.Make<int>("Manager", "_instance", "_saveManager", "_currentSaveData", "_cachedCurrentCoinCount");
+        vars.Helper["whistle"] = mono.Make<bool>("Manager", "_instance", "_primaryPlayerMachine", "_hasWhistle", "_value");
         return true;
     });
 
@@ -69,6 +71,7 @@ start {
 
 split {
     return (current.captures - old.captures == 1 && settings["split_capture"]) ||
+            (settings["split_whistle"] && !old.whistle && current.whistle) ||
             (settings["split_10"] && vars.queueSplit && vars.splitTimer.ElapsedMilliseconds > 516) ||
             (settings["split_26"] && vars.queueSplit && vars.splitTimer.ElapsedMilliseconds > 516)||
             (settings["split_scales"] && old.active != current.active && current.active == current.trad && current.active != 0);
