@@ -146,7 +146,7 @@ start {
 }
 
 split {
-    if (settings["room"] && current.Hardload && !old.Hardload && !vars.OOBDoorID.Contains(current.roomID) || current.Softload && !old.Softload || current.roomID == 12 && old.roomID == 9 || current.roomID == 15 && old.roomID == 9 || current.roomID == 11 && old.roomID == 10 || current.roomID == 12 && old.roomID == 10 || current.roomID == 15 && old.roomID == 10) return true;
+    if (settings["room"] && current.Hardload && !old.Hardload && !vars.OOBDoorID.Contains(current.roomID) || settings["room"] && current.Softload && !old.Softload || settings["room"] && current.roomID == 12 && old.roomID == 9 || settings["room"] && current.roomID == 15 && old.roomID == 9 || settings["room"] && current.roomID == 11 && old.roomID == 10 || settings["room"] && current.roomID == 12 && old.roomID == 10 || settings["room"] && current.roomID == 15 && old.roomID == 10) return true;
     if (settings["room"] && current.roomID == 168 && current.Cutscene && !old.Cutscene && vars.Harley == 0) vars.Harley = 1;
     if (vars.Harley == 1)
     {
