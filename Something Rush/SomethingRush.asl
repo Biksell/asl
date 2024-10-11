@@ -42,3 +42,7 @@ start {
 split {
     return old.activeScene != current.activeScene && old.activeScene[0] < current.activeScene[0];
 }
+
+exit {
+    vars.TimerModel.Reset();
+}
