@@ -25,6 +25,7 @@ startup {
     Assembly.Load(File.ReadAllBytes("Components/asl-help")).CreateInstance("Unity");
 
     vars.Helper.LoadSceneManager = true;
+    vars.TimerModel = new TimerModel { CurrentState = timer };
 }
 
 update {
