@@ -25,7 +25,7 @@ startup {
     Assembly.Load(File.ReadAllBytes("Components/asl-help")).CreateInstance("Unity");
 
     vars.Helper.LoadSceneManager = true;
-    vars.Helper.AlertGameTime();
+    vars.Helper.AlertLoadless();
     vars.TimerModel = new TimerModel { CurrentState = timer };
 
 }
