@@ -25,15 +25,23 @@ startup {
     Assembly.Load(File.ReadAllBytes("Components/asl-help")).CreateInstance("Unity");
 
     vars.Helper.LoadSceneManager = true;
+    vars.Helper.AlertGameTime();
     vars.TimerModel = new TimerModel { CurrentState = timer };
+
 }
 
 update {
     current.activeScene = vars.Helper.Scenes.Active.Name ?? current.activeScene;
     current.loadingScene = vars.Helper.Scenes.Loaded[0].Name ?? current.loadingScene;
 
+    //print((current.activeScene != current.loadingScene) + "");
+
     if(old.activeScene != current.activeScene) print("activeScene: " + old.activeScene + " -> " + current.activeScene);
     if(old.loadingScene != current.loadingScene) print("loadingScene: " + old.loadingScene + " -> " + current.loadingScene);
+}
+
+isLoading {
+    return current.activeScene != current.loadingScene;
 }
 
 start {
