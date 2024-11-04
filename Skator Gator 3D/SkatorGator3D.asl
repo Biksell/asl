@@ -27,16 +27,15 @@ startup {
     vars.Helper.AlertGameTime();
     vars.pauseTimer = new Stopwatch();
     vars.totalPause = new TimeSpan();
-    vars.check = false;
-    vars.storeIGT = new TimeSpan();
+
 }
 
 init {
     vars.Helper.TryLoad = (Func<dynamic, bool>)(mono => {
         vars.Helper["paused"] = mono.Make<bool>("UIManager", 1, "m_Instance", "_paused");
-        vars.Helper["minutes"] = mono.Make<int>("UIManager", 1, "m_Instance", "_minutes");
-        vars.Helper["seconds"] = mono.Make<int>("UIManager", 1, "m_Instance", "_seconds");
         vars.Helper["milliSeconds"] = mono.Make<int>("UIManager", 1, "m_Instance", "_milliseconds");
+        vars.Helper["seconds"] = mono.Make<int>("UIManager", 1, "m_Instance", "_seconds");
+        vars.Helper["minutes"] = mono.Make<int>("UIManager", 1, "m_Instance", "_minutes");
         return true;
     });
 }
@@ -47,8 +46,6 @@ onStart {
     current.igt = TimeSpan.Zero;
     vars.pauseTimer.Reset();
     vars.totalPause = TimeSpan.Zero;
-    vars.storeIGT = TimeSpan.Zero;
-    vars.check = false;
 }
 
 update {
@@ -66,29 +63,19 @@ update {
 
     current.pauseTime = TimeSpan.FromMilliseconds(vars.pauseTimer.ElapsedMilliseconds);
 
-    if (vars.check) {
-        if(current.igt.ToString() == "00:00:00" && old.igt == current.igt) {
-            vars.totalIGT += vars.storeIGT;
-        }
-        vars.check = false;
-        vars.storeIGT = TimeSpan.Zero;
-    }
-
-    if (old.igt > current.igt && !vars.Levels.Contains(current.activeScene))
-        vars.totalIGT += old.igt;
-    if (current.igt.ToString() == "00:00:00" && old.igt > current.igt && vars.Levels.Contains(current.activeScene)) {
-        vars.storeIGT = old.igt;
-        vars.check = true;
-    }
 
     print(current.activeScene + "," + current.loadingScene + "; " + old.igt.ToString() + ", " + current.igt.ToString());
-    //print("" + (current.igt.ToString() == "00:00:00"));
+    print("" + (current.igt.ToString() == "00:00:00"));
 
     if (!old.paused && current.paused) { vars.pauseTimer.Start(); current.pauseTime = TimeSpan.Zero; }
     if (old.paused && !current.paused) { vars.totalPause += current.pauseTime + TimeSpan.FromMilliseconds(200); current.pauseTime = TimeSpan.Zero; vars.pauseTimer.Reset(); }
 }
 
 gameTime {
+    if (old.igt > current.igt && !vars.Levels.Contains(current.activeScene))
+        vars.totalIGT += old.igt;
+    if (current.igt.ToString() == "00:00:00" && old.igt > current.igt && vars.Levels.Contains(current.activeScene))
+        vars.totalIGT += old.igt;
     return vars.totalIGT + current.igt + current.pauseTime + vars.totalPause;
 }
 
