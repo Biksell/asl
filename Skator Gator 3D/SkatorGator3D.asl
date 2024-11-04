@@ -1,10 +1,11 @@
 // Reminder; Game has better IGT access as well, but the UI time is used for easier verification
 // Made by Biksel, credits to Ero for making asl-help and for helping witha more accurate total IGT calculation
-// v1.4 (Full Game)
+// v1.6 (Full Game)
 state("SG3D_Windows_64_SteamVersion_Demo") {}
 state("SG3D_Windows_64_SteamVersion") {}
 
 startup {
+
     Assembly.Load(File.ReadAllBytes("Components/asl-help")).CreateInstance("Unity");
 
     vars.completedLevels = new HashSet<String>();
@@ -27,7 +28,6 @@ startup {
     vars.Helper.AlertGameTime();
     vars.pauseTimer = new Stopwatch();
     vars.totalPause = new TimeSpan();
-
 }
 
 init {
@@ -48,13 +48,20 @@ onStart {
     vars.totalPause = TimeSpan.Zero;
 }
 
+onReset {
+    vars.completedLevels.Clear();
+    vars.totalIGT = TimeSpan.Zero;
+    current.igt = TimeSpan.Zero;
+    vars.pauseTimer.Reset();
+    vars.totalPause = TimeSpan.Zero;
+}
+
 update {
     current.activeScene = vars.Helper.Scenes.Active.Name ?? current.activeScene;
 	current.loadingScene = vars.Helper.Scenes.Loaded[0].Name ?? current.loadingScene;
 
-    if(old.activeScene != current.activeScene) print(old.activeScene + "->" + current.activeScene);
-    if(old.loadingScene != current.loadingScene) print(old.loadingScene + "->" + current.loadingScene);
-
+    if(old.activeScene != current.activeScene) print("Active: " + old.activeScene + "->" + current.activeScene);
+    if(old.loadingScene != current.loadingScene) print("Loading: " + old.loadingScene + "->" + current.loadingScene);
 
     if(vars.Levels.Contains(current.activeScene))
         current.igt = new TimeSpan(0, 0, current.minutes, current.seconds, current.milliSeconds * 10);
@@ -63,9 +70,8 @@ update {
 
     current.pauseTime = TimeSpan.FromMilliseconds(vars.pauseTimer.ElapsedMilliseconds);
 
-
-    print(current.activeScene + "," + current.loadingScene + "; " + old.igt.ToString() + ", " + current.igt.ToString());
-    print("" + (current.igt.ToString() == "00:00:00"));
+    //print(old.activeScene + "," + current.activeScene + ",  " + old.loadingScene + "," + current.loadingScene + "; " + old.igt.ToString() + ", " + current.igt.ToString());
+    //print("" + (current.igt.ToString() == "00:00:00"));
 
     if (!old.paused && current.paused) { vars.pauseTimer.Start(); current.pauseTime = TimeSpan.Zero; }
     if (old.paused && !current.paused) { vars.totalPause += current.pauseTime + TimeSpan.FromMilliseconds(200); current.pauseTime = TimeSpan.Zero; vars.pauseTimer.Reset(); }
@@ -90,10 +96,9 @@ start {
 
 split {
     // Doesn't currently split at the end, couldn't find a condition that would fit it
-    if (vars.Levels.Contains(current.activeScene) && current.loadingScene == "LoadingSceneEmpty" && vars.completedLevels.Add(current.activeScene) && !current.paused) {
+    if (vars.Levels.Contains(current.activeScene) && current.loadingScene == "LoadingSceneEmpty" && vars.completedLevels.Add(old.activeScene) && !current.paused) {
         return true;
     }
-
 }
 
 reset {
