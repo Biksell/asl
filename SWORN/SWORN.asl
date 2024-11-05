@@ -45,11 +45,22 @@ init {
 
     current.activeScene = "";
     current.loadingScene = "";
+    vars.canStart = true;
+}
+
+onStart {
+    vars.canStart = false;
+}
+
+onReset {
+    vars.canStart = true;
 }
 
 update {
     current.activeScene = vars.Helper.Scenes.Active.Name ?? current.activeScene;
     current.loadingScene = vars.Helper.Scenes.Loaded[0].Name ?? current.loadingScene;
+
+    if (current.activeScene == "3e46d34be382e6f40999ce606619fde5" && !vars.canStart) vars.canStart = true;
 
     if(old.activeScene != current.activeScene) print("Active: " + old.activeScene + "->" + current.activeScene);
     if(old.loadingScene != current.loadingScene) print("Loading: " + old.loadingScene + "->" + current.loadingScene);
@@ -59,7 +70,7 @@ update {
 }
 
 start {
-    return !current.finished && old.GameTime == 0f && current.GameTime > 0f;
+    return vars.canStart && old.GameTime == 0f && current.GameTime > 0f;
 }
 
 split {
