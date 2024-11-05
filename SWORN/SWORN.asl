@@ -66,7 +66,7 @@ split {
     return (settings["split_room"] && old.loadingScene != current.loadingScene && !vars.ignored.Contains(current.loadingScene) ||
             //settings["split"] && settings["split_boss"] && (old.levelCompleted == 6 && current.levelCompleted == 7 || old.levelCompleted == 15 && current.levelCompleted == 16) ||
             settings["split_boss"] && !settings["split_room"] && vars.bossArenas.Contains(old.activeScene) && old.activeScene != current.activeScene && !current.finished||
-            settings["split_end"] && current.finished && current.levelCompleted == 28 && ((!old.finished && current.finished) || (old.levelCompleted < current.levelCompleted)) && current.activeScene == "cd292f0b2dccc4245850fc0843d5e977");
+            settings["split_end"] && current.finished && current.levelCompleted == 26 && ((!old.finished && current.finished) || (old.levelCompleted < current.levelCompleted)) && current.activeScene == "cd292f0b2dccc4245850fc0843d5e977");
 }
 
 reset {
