@@ -1,6 +1,6 @@
 // Reminder; Game has better IGT access as well, but the UI time is used for easier verification
 // Made by Biksel, credits to Ero for making asl-help and for helping witha more accurate total IGT calculation
-// v1.6 (Full Game)
+// updated 2024/11/06 04:14AM
 state("SG3D_Windows_64_SteamVersion_Demo") {}
 state("SG3D_Windows_64_SteamVersion") {}
 
@@ -96,7 +96,7 @@ start {
 
 split {
     // Doesn't currently split at the end, couldn't find a condition that would fit it
-    if (vars.Levels.Contains(current.activeScene) && current.loadingScene == "LoadingSceneEmpty" && vars.completedLevels.Add(old.activeScene) && !current.paused) {
+    if (vars.Levels.Contains(old.activeScene) && old.activeScene != current.activeScene && current.activeScene == "LoadingSceneEmpty" && vars.completedLevels.Add(old.activeScene) && !current.paused) {
         return true;
     }
 }
