@@ -6,8 +6,8 @@ startup {
     vars.Helper.AlertLoadless();
 
     settings.Add("start", true, "Start on level fade-in");
-    settings.Add("split_flag", false, "Split on touching the flagpole");
-    settings.Add("split_timer", true, "Split on end-timer entering screen");
+    settings.Add("split_flag", true, "Split on touching the flagpole");
+    settings.Add("split_timer", false, "Split on end-timer entering screen");
     settings.Add("reset", true, "Reset on leaving without finishing level");
 }
 
