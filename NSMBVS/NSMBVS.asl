@@ -11,6 +11,12 @@ startup {
     settings.Add("split_50c", false, "50 coins", "split");
     settings.Add("split_99c", false, "99 coins", "split");
     settings.Add("reset", false, "Reset on leaving match without reaching star requirement");
+
+    var noticeMsg = MessageBox.Show(
+        "Splitting is only supported for singleplayer.",
+        "LiveSplit | New Super Mario Bros. Versus",
+        MessageBoxButtons.OK, MessageBoxIcon.Information
+    );
 }
 
 init {
