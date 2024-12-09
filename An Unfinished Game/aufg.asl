@@ -3,6 +3,7 @@ state("UnfinishedGame") {}
 startup {
     Assembly.Load(File.ReadAllBytes("Components/asl-help")).CreateInstance("Unity");
     vars.Helper.LoadSceneManager = true;
+    vars.Helper.AlertLoadless();
 
     settings.Add("demo", true, "Demo: ");
     settings.Add("start", true, "Start on starting New Game");
