@@ -41,5 +41,5 @@ start {
 }
 
 split {
-    return settings["split"] (old.ms != current.ms && current.ms != 0f) || (old.activeScene == "0_LobbyDemo" && current.activeScene == "01_Tutorial");
+    return settings["split"] && (old.ms != current.ms && current.ms != 0f) || (old.activeScene == "0_LobbyDemo" && current.activeScene == "01_Tutorial");
 }
