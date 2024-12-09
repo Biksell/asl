@@ -6,8 +6,8 @@ startup {
     vars.Helper.AlertLoadless();
 
     settings.Add("demo", true, "Demo: ");
-    settings.Add("start", true, "Start on starting New Game");
-    settings.Add("split", true, "Split on finishing a level (Intro included)");
+    settings.Add("start", true, "Start on starting New Game", "demo");
+    settings.Add("split", true, "Split on finishing a level (Intro included)", "demo");
 }
 
 init {
