@@ -598,13 +598,13 @@ split {
             }
             if (settings["lij2_nocut"] && vars.splitDelay.ElapsedMilliseconds >= 4000 && current.Room==89 && current.Cutscene==1 && old.Cutscene==0 && vars.Count==1) vars.Count++;
             else if (settings["lij2_standard"] && vars.splitDelay.ElapsedMilliseconds >= 23000 && current.Room==89 && current.Cutscene==1 && old.Cutscene==0 && vars.Count==2) vars.Count++;
-            if (settings ["n"] && current.Room==89 && current.Cutscene==1 && vars.Count==2)
+            if (settings["lij2_nocut"] && current.Room==89 && current.Cutscene==1 && vars.Count==2)
             {
                 vars.splitDelay.Reset();
                 vars.Count=0;
                 return true;
             }
-            else if (settings ["s"] && current.Room==89 && current.Cutscene==1 && vars.Count==3)
+            else if (settings["lij2_standard"] && current.Room==89 && current.Cutscene==1 && vars.Count==3)
             {
                 vars.splitDelay.Reset();
                 vars.Count=0;
