@@ -45,7 +45,7 @@ init {
 }
 
 isLoading {
-    if (!vars.isEmu) return current.load == 1 || current.endLoad == 1;
+    if (!vars.isEmu) return current.load == 1 || (current.endLoad == 1 && (settings["startDestiny"] || settings["startSecret"]));
 }
 
 update {
