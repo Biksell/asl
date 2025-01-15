@@ -175,14 +175,15 @@ state("LEGOSTARWARSSKYWALKERSAGA_DX11", "TSS") {
 startup {
     vars.doubleSplit = new Stopwatch();
 
+    Assembly.Load(File.ReadAllBytes("Components/asl-help")).CreateInstance("Basic");
+    settings.Add("UTC_timer", true, "Show UTC time");
+
     settings.Add("lij2", true, "LEGO Indiana Jones 2");
     settings.Add("lij2_nocut", false, "N0CUT5", "lij2");
     settings.Add("lij2_standard", true, "Standard", "lij2");
 }
 
 init {
-
-
     // TCS
     vars.inCantina = false;
     vars.levellookup = new byte[43]{0x80,0x80,0x0,0x1,0x28,0x0,0x81,0x14,0x10,0x40,0x0,0x91,0x84,0xa8,0x0,0xa,0x41,0x8,0x45,0x80,0x80,0x0,0x2,0x2,0x1,0x48,0x1,0x8,0x10,0x10,0x10,0x8,0x52,0x80,0xa0,0x40,0x0,0x22,0xaa,0xaa,0x1a,0x20,0x0};
@@ -213,6 +214,13 @@ onSplit {
 update {
 
     if (vars.doubleSplit.ElapsedMilliseconds > 1500) vars.doubleSplit.Reset();
+
+    if (!settings["UTC_timer"] && vars.Helper.Texts["time"].Left == "UTC") {
+        vars.Helper.Texts.Remove("time");
+    } else if (settings["UTC_timer"]) {
+        vars.Helper.Texts["time"].Left = "UTC";
+        vars.Helper.Texts["time"].Right = DateTime.UtcNow.ToUniversalTime() + "";
+    }
 
     switch (game.ProcessName) {
         case "LEGOStarWarsSaga":
