@@ -215,7 +215,7 @@ update {
 
     if (vars.doubleSplit.ElapsedMilliseconds > 1500) vars.doubleSplit.Reset();
 
-    if (!settings["UTC_timer"] && vars.Helper.Texts["time"].Left == "UTC") {
+    if (!settings["UTC_timer"]) {
         vars.Helper.Texts.Remove("time");
     } else if (settings["UTC_timer"]) {
         vars.Helper.Texts["time"].Left = "UTC";
