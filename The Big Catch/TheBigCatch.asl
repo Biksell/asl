@@ -72,8 +72,8 @@ start {
 split {
     return (current.captures - old.captures == 1 && settings["split_capture"]) ||
             (settings["split_whistle"] && !old.whistle && current.whistle) ||
-            (settings["split_10"] && vars.queueSplit && vars.splitTimer.ElapsedMilliseconds > 516) ||
-            (settings["split_26"] && vars.queueSplit && vars.splitTimer.ElapsedMilliseconds > 516)||
+            (settings["split_10"] && vars.queueSplit && vars.splitTimer.ElapsedMilliseconds > 466) ||
+            (settings["split_26"] && vars.queueSplit && vars.splitTimer.ElapsedMilliseconds > 466)||
             (settings["split_scales"] && old.active != current.active && current.active == current.trad && current.active != 0);
 }
 
