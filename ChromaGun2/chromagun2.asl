@@ -1,9 +1,14 @@
 state("ChromaGun2-Win64-Shipping") {
+    bool pointerLoading: 0x92AFF70, 0x178;
 }
 
 startup {
     Assembly.Load(File.ReadAllBytes("Components/asl-help")).CreateInstance("Basic");
     vars.Helper.AlertLoadless();
+
+    settings.Add("start", true, "Start after skipping intro text");
+    settings.Add("demo_any%", true, "Split on loading screens between chambers");
+    settings.Add("demo_end", true, "Split on entering the portal in the final chamber");
 }
 
 init
@@ -41,6 +46,7 @@ init
     vars.Helper["x"] = vars.Helper.Make<double>(gWorld, 0x1D8, 0x38, 0x0, 0x30, 0x0348, 0x0298, 0x128);
     vars.Helper["z"] = vars.Helper.Make<double>(gWorld, 0x1D8, 0x38, 0x0, 0x30, 0x0348, 0x0298, 0x130);
     vars.Helper["y"] = vars.Helper.Make<double>(gWorld, 0x1D8, 0x38, 0x0, 0x30, 0x0348, 0x0298, 0x138);
+    vars.Helper["test"] = vars.Helper.Make<uint>(gWorld, 0x0160, 0x18, 0x02A8, 0x0, 0x029A);
 
     vars.Helper["loading"] = vars.Helper.Make<bool>(gSyncLoad);
     vars.loadCount = 0;
@@ -56,8 +62,9 @@ update
     vars.Helper.MapPointers();
     current.player = vars.FNameToString(current.ULocalPlayer);
     current.level = vars.FNameToString(current.GWorldName);
-    if (current.level.Length > 10) current.levelNumber = Int32.Parse(current.level.Substring(10,1));
+    if (current.level.Length > 12) current.levelNumber = Int32.Parse(current.level.Substring(10,1));
     if (current.levelNumber == 4) current.positionTotal = Math.Floor(current.x + current.y + current.z);
+    current.positionTotal = Math.Floor(current.x + current.y + current.z);
 
     //if (current.levelNumber == 4 && old.positionTotal == 20657 && old.positionTotal != current.positionTotal) vars.endSplit.Start();
 
@@ -80,14 +87,16 @@ update
     if (old.level != current.level) print("level: " + old.level + " -> " + current.level);
     if (old.TransitionType != current.TransitionType) print("TransitionType: " + old.TransitionType + " -> " + current.TransitionType);
     //if (old.positionTotal != current.positionTotal) print(current.positionTotal + "");
+    //print(current.test + "");
+    //print(vars.FNameToString(current.test) + "");
 }
 
 isLoading {
-    return current.level == "None" || current.loading;
+    return current.level == "None" || current.loading || current.pointerLoading;
 }
 
 start {
-    return vars.loadCount == 2 && !current.loading && current.levelNumber == 1;
+    return settings["start"] && vars.loadCount == 2 && !current.loading && current.levelNumber == 1;
 }
 
 onStart {
@@ -95,11 +104,11 @@ onStart {
 }
 
 split {
-    return (current.levelNumber - old.levelNumber == 1) ||
+    return (settings["demo_any%"] && current.levelNumber - old.levelNumber == 1) ||
             //(current.levelNumber == 4 && vars.endSplit.ElapsedMilliseconds >= 4133) ||
-            (current.levelNumber == 4 && current.positionTotal == 20657 && old.positionTotal != current.positionTotal) ||
-            (old.level == "None" && current.level == "Chamber_0-3_Demo_Chickenverse") ||
-            (old.level == "Chamber_0-3_Demo" && current.level == "Chamber_0-3_Demo_Chickenverse");
+            (settings["demo_end"] && current.levelNumber == 4 && current.positionTotal == 20657 && old.positionTotal != current.positionTotal) ||
+            (settings["demo_any%"] && old.level == "None" && current.level == "Chamber_0-3_Demo_Chickenverse") ||
+            (settings["demo_any%"] && old.level == "Chamber_0-3_Demo" && current.level == "Chamber_0-3_Demo_Chickenverse");
 }
 
 onSplit {
