@@ -1,4 +1,7 @@
-state("LEGOPirates", "lpc")
+// Original by Frostidllo
+// Updated by FlamingLazer, Biksel
+
+state("LEGOPirates")
 {
     bool loading: 0xA171A4;
     bool head: 0x00B57874, 0xBB8;
