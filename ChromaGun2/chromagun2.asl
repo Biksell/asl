@@ -42,11 +42,12 @@ init
     vars.Helper["ULocalPlayer"] = vars.Helper.Make<ulong>(gWorld, 0x1D8, 0x38, 0x0, 0x30, 0x18);
     // GEngine.TransitionType
     vars.Helper["TransitionType"] = vars.Helper.Make<uint>(gEngine, 0xBBB);
+    vars.Helper["AuthorityGamemode"] = vars.Helper.Make<uint>(gWorld, 0x158, 0x02F0, 0x18);
     //GWorld.OwningGameInstance.LocalPlayers[0].PlayerController.PlayerCameraManager.TransformComponent.RelativeLocation
     vars.Helper["x"] = vars.Helper.Make<double>(gWorld, 0x1D8, 0x38, 0x0, 0x30, 0x0348, 0x0298, 0x128);
     vars.Helper["z"] = vars.Helper.Make<double>(gWorld, 0x1D8, 0x38, 0x0, 0x30, 0x0348, 0x0298, 0x130);
     vars.Helper["y"] = vars.Helper.Make<double>(gWorld, 0x1D8, 0x38, 0x0, 0x30, 0x0348, 0x0298, 0x138);
-    vars.Helper["test"] = vars.Helper.Make<uint>(gWorld, 0x0160, 0x18, 0x02A8, 0x0, 0x029A);
+
 
     vars.Helper["loading"] = vars.Helper.Make<bool>(gSyncLoad);
     vars.loadCount = 0;
@@ -58,6 +59,7 @@ init
 
 update
 {
+
     vars.Helper.Update();
     vars.Helper.MapPointers();
     current.player = vars.FNameToString(current.ULocalPlayer);
@@ -80,15 +82,12 @@ update
     if (old.x != current.x || old.y != current.y || old.z != current.z) {
         print ("xyz: " + current.x + ", " + current.y + ", " + current.z);
     }*/
-
-    //print(vars.FNameToString(current.level));
+    print(vars.FNameToString(current.AuthorityGamemode));
     if (old.player != current.player) print("player: " + old.player + " -> " + current.player);
     if (old.loading != current.loading) print("loading: " + old.loading + " -> " + current.loading);
     if (old.level != current.level) print("level: " + old.level + " -> " + current.level);
     if (old.TransitionType != current.TransitionType) print("TransitionType: " + old.TransitionType + " -> " + current.TransitionType);
     //if (old.positionTotal != current.positionTotal) print(current.positionTotal + "");
-    //print(current.test + "");
-    //print(vars.FNameToString(current.test) + "");
 }
 
 isLoading {
