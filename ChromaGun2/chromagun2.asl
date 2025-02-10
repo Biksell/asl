@@ -38,16 +38,29 @@ init
 
     // GWorld name
     vars.Helper["GWorldName"] = vars.Helper.Make<ulong>(gWorld, 0x18);
-    // GWorld.OwningGameInstance.LocalPlayers[0].PlayerController
+    // GWorld.OwningGameInstance.LocalPlayers[0].PlayerController.FName
     vars.Helper["ULocalPlayer"] = vars.Helper.Make<ulong>(gWorld, 0x1D8, 0x38, 0x0, 0x30, 0x18);
+    // GWorld.OwningGameInstance.LocalPlayers[0].PlayerController.MyHUD.CurrentHUDConfig
+    vars.Helper["EHUDConfig"] = vars.Helper.Make<byte>(gWorld, 0x1D8, 0x38, 0x0, 0x30, 0x340, 0x3B8);
+    // GWorld.OwningGameInstance.LocalPlayers[0].PlayerController.MyHUD.HUDLayoutInstance
+    vars.Helper["test"] = vars.Helper.Make<byte>(gWorld, 0x1D8, 0x38, 0x0, 0x30, 0x340, 0x3B0, 0x4B0, 0x02F8, 0x00DC);
+    // GWorld.AuthorityGamemode.HUDClass.HUDLayoutInstance.Widgets
+    int widgets = vars.Helper.Read<int>(gWorld, 0x1D8, 0x38, 0x0, 0x30, 0x340, 0x3B0, 0x460 + 0x8);
+    for (int i = 0; i < widgets; i++) {
+        ulong fName = vars.Helper.Read<ulong>(gWorld, 0x1D8, 0x38, 0x0, 0x30, 0x340, 0x3B0, 0x460 + i * 0x18 + 0x8, 0x18);
+        print(vars.FNameToString(fName));
+    }
+    //GWorld.OwningGameInstance.LocalPlayers[0].PlayerController.PlayerCameraManager.TransformComponent.RelativeLocation
+    vars.Helper["x"] = vars.Helper.Make<double>(gWorld, 0x1D8, 0x38, 0x0, 0x30, 0x0348, 0x298, 0x128);
+    vars.Helper["z"] = vars.Helper.Make<double>(gWorld, 0x1D8, 0x38, 0x0, 0x30, 0x0348, 0x298, 0x130);
+    vars.Helper["y"] = vars.Helper.Make<double>(gWorld, 0x1D8, 0x38, 0x0, 0x30, 0x0348, 0x298, 0x138);
+
     // GEngine.TransitionType
     vars.Helper["TransitionType"] = vars.Helper.Make<uint>(gEngine, 0xBBB);
-    vars.Helper["AuthorityGamemode"] = vars.Helper.Make<uint>(gWorld, 0x158, 0x02F0, 0x18);
-    //GWorld.OwningGameInstance.LocalPlayers[0].PlayerController.PlayerCameraManager.TransformComponent.RelativeLocation
-    vars.Helper["x"] = vars.Helper.Make<double>(gWorld, 0x1D8, 0x38, 0x0, 0x30, 0x0348, 0x0298, 0x128);
-    vars.Helper["z"] = vars.Helper.Make<double>(gWorld, 0x1D8, 0x38, 0x0, 0x30, 0x0348, 0x0298, 0x130);
-    vars.Helper["y"] = vars.Helper.Make<double>(gWorld, 0x1D8, 0x38, 0x0, 0x30, 0x0348, 0x0298, 0x138);
-
+    // GEngine.TransitionDescription
+    vars.Helper["TransitionDescription"] = vars.Helper.MakeString(gEngine, 0xBC0, 0x0);
+    // GWorld.AuthorityGamemode.FName
+    vars.Helper["AuthorityGamemode"] = vars.Helper.Make<uint>(gEngine, 0x158, 0x2F0, 0x18);
 
     vars.Helper["loading"] = vars.Helper.Make<bool>(gSyncLoad);
     vars.loadCount = 0;
@@ -82,7 +95,8 @@ update
     if (old.x != current.x || old.y != current.y || old.z != current.z) {
         print ("xyz: " + current.x + ", " + current.y + ", " + current.z);
     }*/
-    print(vars.FNameToString(current.AuthorityGamemode));
+    print(current.test + "");
+    //print(vars.FNameToString(current.test));
     if (old.player != current.player) print("player: " + old.player + " -> " + current.player);
     if (old.loading != current.loading) print("loading: " + old.loading + " -> " + current.loading);
     if (old.level != current.level) print("level: " + old.level + " -> " + current.level);

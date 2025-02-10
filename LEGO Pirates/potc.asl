@@ -56,6 +56,7 @@ split
 {
     return (settings["split_save"] && current.head && !old.head) ||
             (settings["split_nosave"] && old.roomId != current.roomId && vars.loadingScreens.Contains(current.roomId)) ||
+            (settings["split_nosave"] && old.roomId != current.roomId && (current.roomId == 39 || current.roomId == 144) && !vars.splitRooms.Contains(current.roomId) ||
             (settings["split_room"] && old.roomId != current.roomId && !vars.exceptionRooms.Contains(current.roomId) && !vars.skipRooms.Contains(current.roomId)) ||
             (settings["split_room"] && old.roomId != current.roomId && current.roomId == 31 && vars.count >= 1) ||
             (settings["split_room"] && old.roomId != current.roomId && current.roomId == 74 && vars.count >= 1) ||
