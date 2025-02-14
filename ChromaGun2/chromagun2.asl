@@ -16,7 +16,7 @@ startup {
     settings.Add("start", true, "Start after skipping intro text");
     settings.Add("demo_any%", true, "Split on loading screens between chambers: ");
     settings.Add("demo_end", true, "Split on entering the portal in the final chamber");
-    settings.Add("reset", true, "Reset on going returning to Main Menu");
+    settings.Add("reset", true, "Reset on returning to Main Menu");
 
     for (int i = 1; i < vars.chambers.Count; i++) {
         var str = vars.chambers[i - 1]  + " -> " + vars.chambers[i];
