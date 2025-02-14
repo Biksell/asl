@@ -10,9 +10,7 @@ startup {
     settings.Add("reset", true, "Reset on going returning to Main Menu");
 }
 
-init
-{
-
+init {
     var gEngine = vars.Helper.ScanRel(3, "48 8B 0D ???????? 66 0F 5A C9 E8");
     var gWorld = vars.Helper.ScanRel(3, "48 8B 1D ???????? 48 85 DB 74 ?? 41 B0 01");
     var fNames = vars.Helper.ScanRel(7, "8B D9 74 ?? 48 8D 15 ???????? EB");
@@ -116,5 +114,5 @@ split {
 }
 
 reset {
-    return old.level != "MainMenu" && current.level == "MainMenu";
+    return settings["reset"] && old.level != "MainMenu" && current.level == "MainMenu";
 }
