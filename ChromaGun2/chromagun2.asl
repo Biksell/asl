@@ -71,11 +71,11 @@ init {
     current.positionTotal = 0;
 }
 
-update
-{
+update {
     vars.Helper.Update();
     vars.Helper.MapPointers();
-    current.time = new TimeSpan(0, 0, Int32.Parse(current.SpeedrunTimer.Split(':')[0]), Int32.Parse(current.SpeedrunTimer.Split(':')[1].Split('.')[0]), Int32.Parse(current.SpeedrunTimer.Split('.')[1]) * 10);
+    //print("00:" + current.SpeedrunTimer + "0");
+    current.time = TimeSpan.Parse("00:" + current.SpeedrunTimer);
     //print(current.time.ToString());
 
     current.player = vars.FNameToString(current.ULocalPlayer);
