@@ -2,7 +2,7 @@ state("ChromaGun2-Win64-Shipping") {}
 
 startup {
 
-    vars.levels = new List<string>() {
+    vars.chambers = new List<string>() {
         "Chamber_0-1_Demo",
         "Chamber_0-2_Demo",
         "Chamber_0-3_Demo",
@@ -18,8 +18,8 @@ startup {
     settings.Add("demo_end", true, "Split on entering the portal in the final chamber");
     settings.Add("reset", true, "Reset on going returning to Main Menu");
 
-    for (int i = 1; i < vars.levels.Count; i++) {
-        var str = vars.levels[i - 1]  + " -> " + vars.levels[i];
+    for (int i = 1; i < vars.chambers.Count; i++) {
+        var str = vars.chambers[i - 1]  + " -> " + vars.chambers[i];
         settings.Add(str, true, str, "demo_any%");
     }
 
@@ -92,7 +92,7 @@ update {
     current.time = TimeSpan.Parse("00:" + current.SpeedrunTimer);
 
     current.world = vars.FNameToString(current.GWorldName);
-    if (current.world != "None" && current.world != "MainMenu") current.chamber = current.world;
+    if (vars.chambers.Contains(current.world)) current.chamber = current.world;
 
     if (current.chamber == "Chamber_0-4_Demo") current.positionTotal = Math.Floor(current.x + current.y + current.z);
     current.positionTotal = Math.Floor(current.x + current.y + current.z);
