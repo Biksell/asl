@@ -97,6 +97,8 @@ update {
     if (current.chamber == "Chamber_0-4_Demo") current.positionTotal = Math.Floor(current.x + current.y + current.z);
     current.positionTotal = Math.Floor(current.x + current.y + current.z);
 
+    //if (old.positionTotal != current.positionTotal) print(old.positionTotal + " -> " + current.positionTotal);
+    //if (old.x != current.x || old.y != current.y || old.z != current.z) print("X: " + current.x + ",Y: " + current.y + ",Z: " + current.z);
     if (old.world != current.world) print("world: " + old.world + " -> " + current.world);
     if (old.chamber != current.chamber) print("chamber: " + old.chamber + " -> " + current.chamber);
 }
@@ -114,7 +116,7 @@ start {
 }
 
 split {
-    return (settings[old.chamber + " -> " + current.chamber] && old.chamber != current.chamber) ||
+    return (old.GWorldName != current.GWorldName && settings[old.chamber + " -> " + current.chamber]) ||
             (settings["demo_end"] && current.chamber == "Chamber_0-4_Demo" && current.positionTotal == 20657 && old.positionTotal != current.positionTotal);
 }
 

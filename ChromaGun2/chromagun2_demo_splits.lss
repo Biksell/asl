@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Run version="1.7.0">
+  <GameIcon />
+  <GameName>ChromaGun 2: Dye Hard</GameName>
+  <CategoryName>Any% (Demo)</CategoryName>
+  <LayoutPath>
+  </LayoutPath>
+  <Metadata>
+    <Run id="" />
+    <Platform usesEmulator="False">
+    </Platform>
+    <Region>
+    </Region>
+    <Variables />
+    <CustomVariables />
+  </Metadata>
+  <Offset>00:00:00</Offset>
+  <AttemptCount>0</AttemptCount>
+  <AttemptHistory />
+  <Segments>
+    <Segment>
+      <Name>1. Strange Occurances</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best" />
+      </SplitTimes>
+      <BestSegmentTime />
+      <SegmentHistory />
+    </Segment>
+    <Segment>
+      <Name>2. Stranger Lands</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best" />
+      </SplitTimes>
+      <BestSegmentTime />
+      <SegmentHistory />
+    </Segment>
+    <Segment>
+      <Name>3. Into the Chromaverse</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best" />
+      </SplitTimes>
+      <BestSegmentTime />
+      <SegmentHistory />
+    </Segment>
+    <Segment>
+      <Name>4. Cluck Cluck</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best" />
+      </SplitTimes>
+      <BestSegmentTime />
+      <SegmentHistory />
+    </Segment>
+    <Segment>
+      <Name>5. The End</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best" />
+      </SplitTimes>
+      <BestSegmentTime />
+      <SegmentHistory />
+    </Segment>
+  </Segments>
+  <AutoSplitterSettings>
+    <Version>1.5</Version>
+    <ScriptPath>C:\LiveSplit_1.8.29\Components\chromagun2.asl</ScriptPath>
+    <Start>True</Start>
+    <Reset>True</Reset>
+    <Split>True</Split>
+    <CustomSettings>
+      <Setting id="start" type="bool">True</Setting>
+      <Setting id="demo_any%" type="bool">True</Setting>
+      <Setting id="demo_end" type="bool">True</Setting>
+      <Setting id="reset" type="bool">True</Setting>
+      <Setting id="Chamber_0-1_Demo -&gt; Chamber_0-2_Demo" type="bool">True</Setting>
+      <Setting id="Chamber_0-2_Demo -&gt; Chamber_0-3_Demo" type="bool">True</Setting>
+      <Setting id="Chamber_0-3_Demo -&gt; Chamber_0-3_Demo_Chickenverse" type="bool">True</Setting>
+      <Setting id="Chamber_0-3_Demo_Chickenverse -&gt; Chamber_0-4_Demo" type="bool">True</Setting>
+    </CustomSettings>
+  </AutoSplitterSettings>
+</Run>
