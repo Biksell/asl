@@ -16,6 +16,7 @@ startup {
     settings.Add("start", true, "Start after skipping intro text");
     settings.Add("demo_any%", true, "Split on loading screens between chambers: ");
     settings.Add("demo_end", true, "Split on entering the portal in the final chamber");
+    settings.Add("split_golden", false, "Split on collecting a Golden ChromaGun");
     settings.Add("reset", true, "Reset on returning to Main Menu");
 
     for (int i = 1; i < vars.chambers.Count; i++) {
@@ -72,8 +73,12 @@ init {
 
     // GEngine.TransitionType
     //vars.Helper["TransitionType"] = vars.Helper.Make<uint>(gEngine, 0xBBB);
-    //var l = vars.Helper.Read<int>(gEngine, 0xA80, 0x3F0, 0x2E8, 0x1A0, 0x28, 0x8);
+
+    // GEngine.GameViewport.SpeedRunWidget.TimeText...
     vars.Helper["SpeedrunTimer"] = vars.Helper.MakeString(128, ReadStringType.UTF16, gEngine, 0xA80, 0x3F0, 0x2E8, 0x1A0, 0x28, 0x0);
+
+    // GEngine.GameViewport.SpeedrunWidget.TrinketText
+    vars.Helper["TrinketCount"] = vars.Helper.MakeString(128, ReadStringType.UTF16, gEngine, 0xA80, 0x3F0, 0x2F0, 0x1A0, 0x28, 0x0);
 
     // GEngine.TransitionDescription
     //vars.Helper["TransitionDescription"] = vars.Helper.MakeString(gEngine, 0xBC0, 0x0);
@@ -90,12 +95,16 @@ update {
     vars.Helper.Update();
     vars.Helper.MapPointers();
     current.time = TimeSpan.Parse("00:" + current.SpeedrunTimer);
-
+    current.trinkets = Int32.Parse(current.TrinketCount[current.TrinketCount.Length - 1] + "");
     current.world = vars.FNameToString(current.GWorldName);
     if (vars.chambers.Contains(current.world)) current.chamber = current.world;
 
     if (current.chamber == "Chamber_0-4_Demo") current.positionTotal = Math.Floor(current.x + current.y + current.z);
     current.positionTotal = Math.Floor(current.x + current.y + current.z);
+
+    //print(current.TrinketCount[current.TrinketCount.Length - 1] + "");
+
+    //print(current.trinkets + "");
 
     //if (old.positionTotal != current.positionTotal) print(old.positionTotal + " -> " + current.positionTotal);
     //if (old.x != current.x || old.y != current.y || old.z != current.z) print("X: " + current.x + ",Y: " + current.y + ",Z: " + current.z);
@@ -117,6 +126,7 @@ start {
 
 split {
     return (old.GWorldName != current.GWorldName && settings[old.chamber + " -> " + current.chamber]) ||
+            (settings["split_golden"] && current.trinkets - old.trinkets == 1) ||
             (settings["demo_end"] && current.chamber == "Chamber_0-4_Demo" && current.positionTotal == 20657 && old.positionTotal != current.positionTotal);
 }
 
