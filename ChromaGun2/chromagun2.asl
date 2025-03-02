@@ -95,7 +95,7 @@ update {
     vars.Helper.Update();
     vars.Helper.MapPointers();
     current.time = TimeSpan.Parse("00:" + current.SpeedrunTimer);
-    current.trinkets = Int32.Parse(current.TrinketCount[current.TrinketCount.Length - 1] + "");
+    current.trinkets = Int32.Parse(current.TrinketCount.Substring(current.TrinketCount.Length - 2));
     current.world = vars.FNameToString(current.GWorldName);
     if (vars.chambers.Contains(current.world)) current.chamber = current.world;
 
@@ -103,7 +103,6 @@ update {
     current.positionTotal = Math.Floor(current.x + current.y + current.z);
 
     //print(current.TrinketCount[current.TrinketCount.Length - 1] + "");
-
     //print(current.trinkets + "");
 
     //if (old.positionTotal != current.positionTotal) print(old.positionTotal + " -> " + current.positionTotal);
