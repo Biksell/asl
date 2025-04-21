@@ -3,7 +3,7 @@
 
 state("LegoStarWarsII", "PC") {
     int load: 0x26A26C;
-    int endLoad: 0x24F394;
+    int endLoad: 0x261B40;
     int cutscene: 0x262044;
     //bool status: 0x269A90; //unstable
     byte status: 0x24F389;
@@ -45,7 +45,7 @@ init {
 }
 
 isLoading {
-    if (!vars.isEmu) return current.load == 1 || (current.endLoad == 1 && (settings["startDestiny"] || settings["startSecret"]));
+    if (!vars.isEmu) return current.load == 1 || (current.endLoad == 1 && current.cutscene ==0);
 }
 
 update {
@@ -58,12 +58,15 @@ update {
         current.cutscene = vars.Helper["cutscene"].Current;
         current.load = vars.Helper["load"].Current;
     }
+    /*
     if (old.load != current.load) print("load: " + old.load + " -> " + current.load);
     if (old.cutscene != current.cutscene) print("cutscene: " + old.cutscene + " -> " + current.cutscene);
     if (old.status != current.status) print("status: " + old.status + " -> " + current.status);
     if (old.levelBuffer != current.levelBuffer) print("levelBuffer: " + old.levelBuffer + " -> " + current.levelBuffer);
     if (old.newgame != current.newgame) print("newgame: " + old.newgame + " -> " + current.newgame);
     if (!vars.isEmu) if (old.endLoad != current.endLoad) print("endLoad: " + old.endLoad + " -> " + current.endLoad);
+    */
+    if (old.endLoad != current.endLoad) print("endLoad: " + old.endLoad + " -> " + current.endLoad);
 }
 
 start {
