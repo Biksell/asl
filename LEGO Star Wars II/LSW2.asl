@@ -53,7 +53,10 @@ init {
         emu.Make<byte>("newgame", 0x80400BA3);
         emu.Make<int>("cutscene", 0x80401448);
         emu.Make<int>("load", 0x80400D5C);
-        emu.Make<int>("endload", 0x80400D5C);
+        emu.Make<int>("character_p1", 0x80400ADC);
+        emu.Make<int>("character_p2", 0x80400AE0);
+        emu.Make<int>("shop", 0x80401618);
+        emu.Make<int>("gonkroom", 0x804011A8);
         return true;
     });
 }
@@ -71,9 +74,13 @@ update {
         current.newgame = vars.Helper["newgame"].Current;
         current.cutscene = vars.Helper["cutscene"].Current;
         current.load = vars.Helper["load"].Current;
+        current.endLoad = null;
+        current.character_p1 = vars.Helper["character_p1"].Current;
+        current.character_p2 = vars.Helper["character_p2"].Current;
+        current.shop = vars.Helper["shop"].Current;
+        current.gonkroom = vars.Helper["gonkroom"].Current;
     }
 
-    print(current.gonkroom + "");
     /*
     if (old.load != current.load) print("load: " + old.load + " -> " + current.load);
     if (old.cutscene != current.cutscene) print("cutscene: " + old.cutscene + " -> " + current.cutscene);
@@ -82,13 +89,15 @@ update {
     if (old.newgame != current.newgame) print("newgame: " + old.newgame + " -> " + current.newgame);
     if (!vars.isEmu) if (old.endLoad != current.endLoad) print("endLoad: " + old.endLoad + " -> " + current.endLoad);
     */
-    if (old.endLoad != current.endLoad) print("endLoad: " + old.endLoad + " -> " + current.endLoad);
+    //if (old.gonkroom != current.gonkroom) print("gonkroom: " + old.gonkroom + " -> " + current.gonkroom);
+    //if (old.endLoad != current.endLoad) print("endLoad: " + old.endLoad + " -> " + current.endLoad);
 }
 
 start {
-    return ((settings["startNew"] || settings["gonk_start"]) && old.newgame == 0 && current.newgame == 1 && current.status == 255) ||
-            (settings["startDestiny"] && old.load == 1 && current.load == 0 && current.levelBuffer == "Fight_A\\EmperorF")||
-            (settings["startSecret"] && old.load == 1 && current.load == 0 && current.levelBuffer == "adeRunner_A\\Bloc");
+    return ((settings["startNew"] || settings["gonk_start"]) && !vars.isEmu && old.newgame == 0 && current.newgame == 1 && current.status == 255) ||
+            (settings["startDestiny"] && old.load == 1 && current.load == 0 && current.levelBuffer == "Fight_A\\EmperorF") ||
+            (settings["startSecret"] && old.load == 1 && current.load == 0 && current.levelBuffer == "adeRunner_A\\Bloc") ||
+            (settings["gonk_start"] && vars.isEmu && old.gonkroom == -1 && current.gonkroom == 50);
 }
 
 split {
@@ -101,7 +110,8 @@ split {
 }
 
 reset {
-    return (settings["gonk_reset"] && old.newgame == 1 && current.newgame == 0);
+    return (settings["gonk_reset"] && !vars.isEmu && old.newgame == 1 && current.newgame == 0 ) ||
+            (settings["gonk_reset"] && vars.isEmu && old.gonkroom == 50 && current.gonkroom == -1);
 }
 
 shutdown {
