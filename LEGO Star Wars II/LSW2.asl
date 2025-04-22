@@ -111,7 +111,7 @@ split {
 
 reset {
     return (settings["gonk_reset"] && !vars.isEmu && old.newgame == 1 && current.newgame == 0 ) ||
-            (settings["gonk_reset"] && vars.isEmu && old.gonkroom == 50 && current.gonkroom == -1);
+            (settings["gonk_reset"] && vars.isEmu && (old.gonkroom == 50 || old.gonkroom == 44) && current.gonkroom == -1);
 }
 
 shutdown {
