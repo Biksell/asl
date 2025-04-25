@@ -83,6 +83,8 @@ update {
         current.character_p2 = vars.Helper["character_p2"].Current;
         current.shop = vars.Helper["shop"].Current;
         current.gonkroom = vars.Helper["gonkroom"].Current;
+        current.level = null;
+        current.transition = null;
     }
 
     /*
