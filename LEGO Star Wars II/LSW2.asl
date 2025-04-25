@@ -19,6 +19,8 @@ state("LegoStarWarsII", "PC") {
     int character_p2: 0x241BE4;
     bool shop: 0x26B7CC;
     int gonkroom: 0x24F374;
+    byte level: 0x24C7B4;
+    string16 transition: 0x26A281;
 }
 
 state("Dolphin") {
@@ -30,9 +32,11 @@ startup {
     settings.Add("startNew", true, "New Game", "start");
     settings.Add("startDestiny", false, "[Free Play] Jedi Destiny", "start");
     settings.Add("startSecret", false, "[Minikit Rush] Secret Plans", "start");
+    settings.Add("startIL", false, "[IL] Start on skipping text crawl", "start");
     settings.Add("split", true, "Split: ");
     settings.Add("splitStatus", true, "Split on status screen", "split");
-    settings.Add("splitBespinCS", true, "Split on Bespin ending cutscene", "split");
+    settings.Add("splitBespinCS", true, "[Any%] Split on Bespin ending cutscene", "split");
+    settings.Add("splitTransition", false, "Split on transitions (rooms)", "split");
     settings.Add("gonk", false, "Gonk%");
     settings.Add("gonk_start", true, "Start on New Game", "gonk");
     settings.Add("gonk_split_room", true, "Split on entering outside or inside", "gonk");
@@ -97,12 +101,14 @@ start {
     return ((settings["startNew"] || settings["gonk_start"]) && !vars.isEmu && old.newgame == 0 && current.newgame == 1 && current.status == 255) ||
             (settings["startDestiny"] && old.load == 1 && current.load == 0 && current.levelBuffer == "Fight_A\\EmperorF") ||
             (settings["startSecret"] && old.load == 1 && current.load == 0 && current.levelBuffer == "adeRunner_A\\Bloc") ||
+            (settings["startIL"] && old.load == 1 && current.load == 0 && old.endLoad == 2 && current.endLoad == 0 && (current.level != 0x1C || current.level != 0xFF)) ||
             (settings["gonk_start"] && vars.isEmu && old.gonkroom == -1 && current.gonkroom == 50);
 }
 
 split {
     return (settings["splitStatus"] && old.status == 0 && current.status == 255 && (!String.IsNullOrEmpty(current.levelBuffer) || current.level2 == "SpeederChase_A")) ||
         (settings["splitBespinCS"] && (current.levelBuffer == "CityEscape_Outro" || current.levelBuffer == "CityEscape_Statu") && old.cutscene == 0 && current.cutscene == 1) ||
+        (settings["splitTransition"] && old.transition != current.transition) ||
         (settings["gonk_split_room"] && (old.gonkroom == 50 && current.gonkroom == 44 || old.gonkroom == 44 && current.gonkroom == 50)) ||
         (settings["gonk_split_shop"] && (old.shop != current.shop))||
         (settings["gonk_split_switch"] && (old.character_p2 != 12 && current.character_p2 == 12) || (old.character_p1 != 12 && current.character_p1 == 12));
