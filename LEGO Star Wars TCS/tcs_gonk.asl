@@ -21,17 +21,30 @@ startup {
     settings.Add("split_switch", true, "Split on switching to Gonk on either player");
     settings.Add("reset", true, "Reset on returning to title screen");
     vars.roomSplits = 0;
+    vars.shopSplits = 0;
 }
 
 start {
     return settings["start"] && old.gognewgame == 0 && current.gognewgame == 1;
 }
 
+onStart {
+    vars.roomSplits = 0;
+    vars.shopSplits = 0;
+}
 
 split {
-    return (settings["split_room"] && (old.room != current.room && current.room != 0)) ||
-            (settings["split_shop_enter"] && !old.shop && current.shop) ||
+    return (settings["split_room"] && vars.roomSplits < 2 && (old.room != current.room && current.room != 0)) ||
+            (settings["split_shop_enter"] && vars.shopSplits == 0 && !old.shop && current.shop) ||
             (settings["split_switch"] && (old.charP1 != current.charP1 && current.charP1 == 17 || old.charP2 != current.charP2 && current.charP2 == 17));
+}
+
+onSplit {
+    if (current.shop) {
+        vars.shopSplits++;
+    } else if (current.room != 0) {
+        vars.roomSplits++;
+    }
 }
 
 reset {
