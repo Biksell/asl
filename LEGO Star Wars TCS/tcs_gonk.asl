@@ -17,7 +17,7 @@ startup {
     settings.Add("load", true, "THIS SCRIPT DOES NOT HAVE LOAD REMOVAL. ACTIVATE THE BUILT-IN SCRIPT FOR THAT.");
     settings.Add("start", true, "Start on new game");
     settings.Add("split_room", true, "Split on entering outside or inside");
-    settings.Add("split_shop", false, "Split on entering and exiting shop (not recommended since sob will be inaccurate)");
+    settings.Add("split_shop_enter", true, "Split on entering shop");
     settings.Add("split_switch", true, "Split on switching to Gonk on either player");
     settings.Add("reset", true, "Reset on returning to title screen");
     vars.roomSplits = 0;
@@ -30,7 +30,7 @@ start {
 
 split {
     return (settings["split_room"] && (old.room != current.room && current.room != 0)) ||
-            (settings["split_shop"] && !old.shop && current.shop || old.shop && !current.shop) ||
+            (settings["split_shop_enter"] && !old.shop && current.shop) ||
             (settings["split_switch"] && (old.charP1 != current.charP1 && current.charP1 == 17 || old.charP2 != current.charP2 && current.charP2 == 17));
 }
 
