@@ -11,6 +11,7 @@ state("LEGOStarWarsSaga") {
     int room: 0x5513d0;
     int gogstream: 0x551bc0;
     byte gognewgame : 0x47b758;
+    byte icon: 0x2454FAB;
 }
 
 startup {
@@ -22,9 +23,11 @@ startup {
     settings.Add("reset", true, "Reset on returning to title screen");
     vars.roomSplits = 0;
     vars.shopSplits = 0;
+    refreshRate = 255;
 }
 
 init {
+    vars.gonkSwitch = new Stopwatch();
     vars.splitDelay = new Stopwatch();
 }
 
@@ -32,22 +35,24 @@ start {
     return settings["start"] && old.gognewgame == 0 && current.gognewgame == 1;
 }
 
-update {
-    if ((old.charP1 != current.charP1 && current.charP1 == 17 || old.charP2 != current.charP2 && current.charP2 == 17)) {
-        vars.splitDelay.Start();
-    }
-    if (vars.splitDelay.ElapsedMilliseconds > 200) vars.splitDelay.Reset();
-}
-
 onStart {
     vars.roomSplits = 0;
     vars.shopSplits = 0;
 }
 
+update {
+    if ((old.charP1 != current.charP1 && current.charP1 == 17 || old.charP2 != current.charP2 && current.charP2 == 17)) {
+        vars.gonkSwitch.Start();
+    }
+    if (vars.gonkSwitch.IsRunning && old.icon == 61 && current.icon == 62) vars.splitDelay.Start();
+    if (vars.gonkSwitch.ElapsedMilliseconds > 200) vars.gonkSwitch.Reset();
+    if (vars.splitDelay.ElapsedMilliseconds > 50) vars.gonkSwitch.Reset();
+}
+
 split {
     return (settings["split_room"] && vars.roomSplits < 2 && (old.room != current.room && current.room != 0)) ||
             (settings["split_shop_enter"] && vars.shopSplits == 0 && !old.shop && current.shop) ||
-            (settings["split_switch"] && vars.splitDelay.ElapsedMilliseconds > 6 * (1000 / 60));
+            (settings["split_switch"] && vars.splitDelay.ElapsedMilliseconds > 1 * (1000 / 60));
 }
 
 onSplit {
