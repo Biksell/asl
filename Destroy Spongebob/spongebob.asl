@@ -5,8 +5,8 @@ state("flashplayer_32_sa") {
 startup {
     settings.Add("start", true, "Start on pressing 'Accept'");
     settings.Add("split", true, "Split on:");
-    settings.Add("split_send", false, "Send Spongebob to Rock Bottom");
-    settings.Add("split_end", true, "Mission Accomplished");
+    settings.Add("split_send", false, "Send Spongebob to Rock Bottom", "split");
+    settings.Add("split_end", true, "Mission Accomplished", "split");
     settings.Add("reset", true, "Reset on returning to Main Menu");
 }
 
