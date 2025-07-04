@@ -15,16 +15,20 @@ startup {
     settings.Add("split_save", false, "Split on saving (old, Standard)");
     settings.Add("split_nosave", true, "Split on loading screen after level (N0CUT5)");
     settings.Add("split_room", false, "Split on room transitions");
+    settings.Add("start_load_level", false, "Start on loading the first room of a level (Practice Segments)");
     settings.Add("redhatrush", false, "Red Hat Rush:");
     settings.Add("start_redhat", false, "Start on loading into hub", "redhatrush");
     settings.Add("split_redhat", false, "Split on hub room transitions", "redhatrush");
     settings.Add("split_redhat_end", false, "Split on collecting 20 Red Hats", "redhatrush");
+    
 
     //midtros, opening cutscenes, etc that we want to skip on roomsplitting
-    vars.skipRooms = new List<int>() {11,14,21,31,35,36,42,47,52,54,59,60,66,70,74,81,87,96,101,106,107,109,115,120,122,123,133,136,142,148,149,153,156,159,57,438,58,93,95,165,19,24,28,37,38,45,51,140,144,146,151,157,161,163,59,64,71,79,85,90,91,99,113,118};
+    vars.skipRooms = new List<int>() {11,14,21,31,35,36,42,47,52,54,59,60,66,70,74,81,87,96,101,106,107,109,115,120,122,123,124,127,130,132,133,136,142,148,149,153,156,159,57,438,58,93,95,165,19,24,28,37,38,45,51,140,144,146,151,157,161,163,59,64,71,79,85,90,91,99,113,118};
 
     vars.loadingScreens = new List<int> {2,20,29,39,46,65,72,80,86,87,90,100,108,114,119,144,147,152,158}; // For splitting nocut
     vars.preLoadingScreens = new List<int> {19,28,38,45,58,64,71,79,85,89,95,99,103,107,113,118,132,140,146,151,157,165}; // For splitting nocut
+
+    vars.firstRooms = new List<int> {14,21,31,39,47,60,66,74,81,87,96,101,109,115,120,133,141,148,153,158};
 
     vars.exceptionRooms = new List<int>() {144}; //144 only split first time, 31 and 74 split on the second time
 
@@ -48,8 +52,9 @@ update {
 }
 
 start {
-    return settings["split_nosave"] && old.NewGame == 0 && current.NewGame == 1 && current.roomId == 439;
-    return settings["start_redhat"] && old.roomId == 439 && current.roomId == 2;
+    return settings["split_nosave"] && old.NewGame == 0 && current.NewGame == 1 && current.roomId == 439 ||
+    settings["start_redhat"] && old.roomId == 439 && current.roomId == 2 ||
+    settings["start_load_level"] && old.roomId == 167 && vars.firstRooms.Contains(current.roomId);
 }
 
 onStart {
