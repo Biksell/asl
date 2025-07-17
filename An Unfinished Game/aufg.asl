@@ -5,11 +5,13 @@ startup {
     vars.Helper.LoadSceneManager = true;
     vars.Helper.AlertLoadless();
 
-    settings.Add("start_any", true, "[Any%] Start on pressing New Game");
-    settings.Add("start_ng+", false, "[NG+] Start on loading into a level");
-    settings.Add("split_level", true, "Split on completing a level");
-    settings.Add("split_credits", true, "Split on reaching the credits");
-    settings.Add("split_bug", false, "[100%] Split on collecting a bug");
+    settings.Add("start", true, "Start on: ");
+    settings.Add("start_any", true, "[Any%] Pressing New Game", "start");
+    settings.Add("start_ng+", false, "[NG+] Loading into a level", "start");
+    settings.Add("split", true, "Split on: ");
+    settings.Add("split_level", true, "Completing a level", "split");
+    settings.Add("split_credits", true, "Reaching the credits", "split");
+    settings.Add("split_bug", false, "Collecting a bug", "split");
     settings.Add("reset", true, "Reset on returning to the main menu");
 }
 
