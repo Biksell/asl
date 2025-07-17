@@ -73,7 +73,8 @@ onStart {
 
 split {
     return (settings["split_level"] && old.levelTime == current.levelTime && old.totalTime != current.totalTime && !vars.splitLevels.Contains(current.levelID)) ||
-            (settings["split_credits"] && old.isRunning == 1 && current.isRunning == 3);
+            (settings["split_credits"] && old.isRunning == 1 && current.isRunning == 3) ||
+            (settings["split_bug"] && current.bugsCounter - old.bugsCounter == 1);
 }
 
 onSplit {
