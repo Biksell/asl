@@ -5,41 +5,81 @@ startup {
     vars.Helper.LoadSceneManager = true;
     vars.Helper.AlertLoadless();
 
-    settings.Add("demo", true, "Demo: ");
-    settings.Add("start", true, "Start on starting New Game", "demo");
-    settings.Add("split", true, "Split on finishing a level (Intro included)", "demo");
+    settings.Add("start_any", true, "[Any%] Start on pressing New Game");
+    settings.Add("start_ng+", false, "[NG+] Start on loading into a level");
+    settings.Add("split_level", true, "Split on completing a level");
+    settings.Add("split_credits", true, "Split on reaching the credits");
+    settings.Add("split_bug", false, "[100%] Split on collecting a bug");
+    settings.Add("reset", true, "Reset on returning to the main menu");
 }
 
 init {
     vars.Helper.TryLoad = (Func<dynamic, bool>)(mono => {
-        vars.Helper["fade"] = mono.Make<int>("UIManager", "_instance", "prevFadeCoroutine");
+        //vars.Helper["fade"] = mono.Make<int>("UIManager", "_instance", "prevFadeCoroutine");
         //vars.Helper["paused"] = mono.Make<bool>("PauseMenu", "staticCanOpenMenu", "isPauseMenuOpen");
-        vars.Helper["ms"] = mono.Make<float>("GameManager", "_instance", "_ms");
-        vars.Helper["time"] = mono.Make<float>("GameManager", "_instance", "_timeSpent");
+        //vars.Helper["ms"] = mono.Make<float>("GameManager", "_instance", "_ms");
+        //vars.Helper["time"] = mono.Make<float>("GameManager", "_instance", "_timeSpent");
+        vars.Helper["loading"] = mono.Make<bool>("SpeedrunningStats", "isLoading");
+        vars.Helper["totalTime"] = mono.Make<double>("SpeedrunningStats", "totalTime");
+        vars.Helper["levelTime"] = mono.Make<double>("SpeedrunningStats", "levelTime");
+        vars.Helper["isRunning"] = mono.Make<int>("SpeedrunningStats", "isRunning");
+        vars.Helper["levelID"] = mono.Make<int>("SpeedrunningStats", "levelID");
+        vars.Helper["bugsCounter"] = mono.Make<int>("SpeedrunningStats", "bugsCounter");
+        vars.Helper["bugsArray"] = mono.MakeArray<bool>("SpeedrunningStats", "bugsArray");
         return true;
     });
     current.activeScene = "";
     current.loadingScene = "";
+    refreshRate = 1000;
+    vars.splitLevels = new List<int>();
 }
 
 update {
     current.activeScene = vars.Helper.Scenes.Active.Name ?? current.activeScene;
 	current.loadingScene = vars.Helper.Scenes.Loaded[0].Name ?? current.loadingScene;
 
-    if(old.activeScene != current.activeScene) print("Active: " + old.activeScene + "->" + current.activeScene);
-    if(old.loadingScene != current.loadingScene) print("Loading: " + old.loadingScene + "->" + current.loadingScene);
-    if(old.fade != current.fade) print("fade: " + old.fade + "->" + current.fade);
-    if(old.ms != current.ms) print("ms: " + old.ms + "->" + current.ms);
+    //print(current.testloading + "");
+    /*
+    print("activeScene: " + current.activeScene + "\n" +
+            "loadingScene: " + current.loadingScene + "\n" +
+            "loading: " + current.loading + "\n" +
+            "totalTime: " + current.totalTime + "\n" +
+            "levelTime: " + current.levelTime + "\n" +
+            "isRunning: " + current.isRunning + "\n" +
+            "levelID: " + current.levelID + "\n" +
+            "bugsCounter: " + current.bugsCounter + "\n" +
+            "bugsArray: " + string.Join(",", current.bugsArray));*/
+    if(old.isRunning == 1 && current.isRunning == 2) print("1->2");
+    if(old.isRunning == 2 && current.isRunning == 1) print("2->1");
+
+    //if(old.activeScene != current.activeScene) print("Active: " + old.activeScene + "->" + current.activeScene);
+    //if(old.loadingScene != current.loadingScene) print("Loading: " + old.loadingScene + "->" + current.loadingScene);
+    //if(old.fade != current.fade) print("fade: " + old.fade + "->" + current.fade);
+    //if(old.ms != current.ms) print("ms: " + old.ms + "->" + current.ms);
 }
 
 isLoading {
-    return current.loadingScene != current.activeScene;
+    return current.loading;
 }
 
 start {
-    return settings["start"] && current.activeScene == "MainMenu" && old.fade == 0 && current.fade != 0;
+    return (settings["start_any"] && old.isRunning == 0 && current.isRunning == 1) ||
+           (settings["start_ng+"] && old.activeScene != current.activeScene && old.activeScene == "0_Lobby" && current.activeScene != "MainMenu");
+}
+
+onStart {
+    vars.splitLevels.Clear();
 }
 
 split {
-    return settings["split"] && (old.ms != current.ms && current.ms != 0f) || (old.activeScene == "0_LobbyDemo" && current.activeScene == "01_Tutorial");
+    return (settings["split_level"] && old.levelTime == current.levelTime && old.totalTime != current.totalTime && !vars.splitLevels.Contains(current.levelID)) ||
+            (settings["split_credits"] && old.isRunning == 1 && current.isRunning == 3);
+}
+
+onSplit {
+    vars.splitLevels.Add(current.levelID);
+}
+
+reset {
+    return settings["reset"] && old.isRunning != 0 && current.isRunning == 0;
 }
