@@ -19,8 +19,8 @@ init {
     vars.Helper.TryLoad = (Func<dynamic, bool>)(mono => {
         //vars.Helper["fade"] = mono.Make<int>("UIManager", "_instance", "prevFadeCoroutine");
         //vars.Helper["paused"] = mono.Make<bool>("PauseMenu", "staticCanOpenMenu", "isPauseMenuOpen");
-        //vars.Helper["ms"] = mono.Make<float>("GameManager", "_instance", "_ms");
-        //vars.Helper["time"] = mono.Make<float>("GameManager", "_instance", "_timeSpent");
+        vars.Helper["ms"] = mono.Make<float>("GameManager", "_instance", "_ms");
+        vars.Helper["_outroText"] = mono.Make<float>("GameManager", "_instance", "_outroText");
         vars.Helper["loading"] = mono.Make<bool>("SpeedrunningStats", "isLoading");
         vars.Helper["totalTime"] = mono.Make<double>("SpeedrunningStats", "totalTime");
         vars.Helper["levelTime"] = mono.Make<double>("SpeedrunningStats", "levelTime");
@@ -33,7 +33,8 @@ init {
     current.activeScene = "";
     current.loadingScene = "";
     refreshRate = 1000;
-    vars.splitLevels = new List<int>();
+    vars.splitLevels = new List<string>();
+    vars.debug = false;
 }
 
 update {
@@ -41,18 +42,21 @@ update {
 	current.loadingScene = vars.Helper.Scenes.Loaded[0].Name ?? current.loadingScene;
 
     //print(current.testloading + "");
-    /*
-    print("activeScene: " + current.activeScene + "\n" +
-            "loadingScene: " + current.loadingScene + "\n" +
-            "loading: " + current.loading + "\n" +
-            "totalTime: " + current.totalTime + "\n" +
-            "levelTime: " + current.levelTime + "\n" +
-            "isRunning: " + current.isRunning + "\n" +
-            "levelID: " + current.levelID + "\n" +
-            "bugsCounter: " + current.bugsCounter + "\n" +
-            "bugsArray: " + string.Join(",", current.bugsArray));*/
-    if(old.isRunning == 1 && current.isRunning == 2) print("1->2");
-    if(old.isRunning == 2 && current.isRunning == 1) print("2->1");
+    //print(current.ms + "");
+    if (vars.debug) {
+        print("activeScene: " + current.activeScene + "\n" +
+                "loadingScene: " + current.loadingScene + "\n" +
+                "loading: " + current.loading + "\n" +
+                "totalTime: " + current.totalTime + "\n" +
+                "levelTime: " + current.levelTime + "\n" +
+                "isRunning: " + current.isRunning + "\n" +
+                "levelID: " + current.levelID + "\n" +
+                "ms: " + current.ms + "\n" +
+                "bugsCounter: " + current.bugsCounter + "\n" +
+                "bugsArray: " + string.Join(",", current.bugsArray));
+        if(old.isRunning == 1 && current.isRunning == 2) print("1->2");
+        if(old.isRunning == 2 && current.isRunning == 1) print("2->1");
+    }
 
     //if(old.activeScene != current.activeScene) print("Active: " + old.activeScene + "->" + current.activeScene);
     //if(old.loadingScene != current.loadingScene) print("Loading: " + old.loadingScene + "->" + current.loadingScene);
@@ -74,13 +78,23 @@ onStart {
 }
 
 split {
-    return (settings["split_level"] && old.levelTime == current.levelTime && old.totalTime != current.totalTime && !vars.splitLevels.Contains(current.levelID)) ||
+    return (settings["split_level"] && old.ms != current.ms && current.ms != 0f && !vars.splitLevels.Contains(current.activeScene)) ||
             (settings["split_credits"] && old.isRunning == 1 && current.isRunning == 3) ||
             (settings["split_bug"] && current.bugsCounter - old.bugsCounter == 1);
 }
 
 onSplit {
-    vars.splitLevels.Add(current.levelID);
+    vars.splitLevels.Add(current.activeScene);
+    print("activeScene: " + old.activeScene + "->" + current.activeScene + "\n" +
+                "loadingScene: " + old.loadingScene + "->" + current.loadingScene + "\n" +
+                "loading: " + old.loading + "->" + current.loading + "\n" +
+                "totalTime: " + old.totalTime + "->" + current.totalTime + "\n" +
+                "levelTime: " + old.levelTime + "->" + current.levelTime + "\n" +
+                "isRunning: " + old.isRunning + "->" + current.isRunning + "\n" +
+                "levelID: " + old.levelID + "->" + current.levelID + "\n" +
+                "ms: " + old.ms + "->" + current.ms + "\n" +
+                "bugsCounter: " + old.bugsCounter + "->" + current.bugsCounter + "\n" +
+                "bugsArray: " + old.bugsArray + "->" + string.Join(",", current.bugsArray));
 }
 
 reset {
