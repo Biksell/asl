@@ -100,7 +100,7 @@ update {
 }
 
 start {
-    return ((settings["startNew"] || settings["gonk_start"]) && !vars.isEmu && old.newgame == 0 && current.newgame == 1 && current.status == 255) ||
+    return ((settings["startNew"] || settings["gonk_start"]) && old.newgame == 0 && current.newgame == 1 && current.status == 255) ||
             (settings["startDestiny"] && old.load == 1 && current.load == 0 && current.levelBuffer == "Fight_A\\EmperorF") ||
             (settings["startSecret"] && old.load == 1 && current.load == 0 && current.levelBuffer == "adeRunner_A\\Bloc") ||
             (settings["startIL"] && old.load == 1 && current.load == 0 && old.endLoad == 2 && current.endLoad == 0 && (current.level != 0x1C || current.level != 0xFF)) ||
