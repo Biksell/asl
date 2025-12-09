@@ -87,14 +87,14 @@ update {
         current.transition = null;
     }
 
-    /*
+
     if (old.load != current.load) print("load: " + old.load + " -> " + current.load);
     if (old.cutscene != current.cutscene) print("cutscene: " + old.cutscene + " -> " + current.cutscene);
     if (old.status != current.status) print("status: " + old.status + " -> " + current.status);
     if (old.levelBuffer != current.levelBuffer) print("levelBuffer: " + old.levelBuffer + " -> " + current.levelBuffer);
     if (old.newgame != current.newgame) print("newgame: " + old.newgame + " -> " + current.newgame);
     if (!vars.isEmu) if (old.endLoad != current.endLoad) print("endLoad: " + old.endLoad + " -> " + current.endLoad);
-    */
+
     //if (old.gonkroom != current.gonkroom) print("gonkroom: " + old.gonkroom + " -> " + current.gonkroom);
     //if (old.endLoad != current.endLoad) print("endLoad: " + old.endLoad + " -> " + current.endLoad);
 }
@@ -102,7 +102,7 @@ update {
 start {
     return ((settings["startNew"] || settings["gonk_start"]) && old.newgame == 0 && current.newgame == 1 && current.status == 255) ||
             (settings["startDestiny"] && old.load == 1 && current.load == 0 && current.levelBuffer == "Fight_A\\EmperorF") ||
-            (settings["startSecret"] && old.load == 1 && current.load == 0 && current.levelBuffer == "adeRunner_A\\Bloc") ||
+            (settings["startSecret"] && old.load == 1 && current.load == 0 && current.levelBuffer == "thStar2Battle_A\\") ||
             (settings["startIL"] && old.load == 1 && current.load == 0 && old.endLoad == 2 && current.endLoad == 0 && (current.level != 0x1C || current.level != 0xFF)) ||
             (settings["gonk_start"] && vars.isEmu && old.gonkroom == -1 && current.gonkroom == 50);
 }
