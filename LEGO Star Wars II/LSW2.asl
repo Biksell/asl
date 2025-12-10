@@ -31,7 +31,7 @@ startup {
     settings.Add("start", true, "Start:");
     settings.Add("startNew", true, "New Game", "start");
     settings.Add("startDestiny", false, "[Free Play] Jedi Destiny", "start");
-    settings.Add("startSecret", false, "[Minikit Rush] Secret Plans", "start");
+    settings.Add("startSecret", false, "[Minikit Rush] Into the Death Star", "start");
     settings.Add("startIL", false, "[IL] Start on skipping text crawl", "start");
     settings.Add("split", true, "Split: ");
     settings.Add("splitStatus", true, "Split on status screen", "split");
