@@ -66,12 +66,12 @@ init {
 }
 
 isLoading {
-    if (!vars.isEmu) return current.load == 1 || (current.endLoad == 1 && current.cutscene ==0);
+    if (!vars.isEmu) return current.load == 1 || (current.endLoad == 1 && current.cutscene == 0);
 }
 
 update {
-    vars.isEmu = vars.Helper.Update();
     if (vars.isEmu) {
+        vars.Helper.Update();
         current.levelBuffer = vars.Helper["levelBuffer"].Current;
         current.level2 = vars.Helper["level2"].Current;
         current.status = vars.Helper["status"].Current;
@@ -88,7 +88,7 @@ update {
     }
 
 
-    if (old.load != current.load) print("load: " + old.load + " -> " + current.load);
+    //if (old.load != current.load) print("load: " + old.load + " -> " + current.load);
     if (old.cutscene != current.cutscene) print("cutscene: " + old.cutscene + " -> " + current.cutscene);
     if (old.status != current.status) print("status: " + old.status + " -> " + current.status);
     if (old.levelBuffer != current.levelBuffer) print("levelBuffer: " + old.levelBuffer + " -> " + current.levelBuffer);
