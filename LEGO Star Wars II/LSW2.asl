@@ -61,6 +61,7 @@ init {
         emu.Make<int>("character_p2", 0x80400AE0);
         emu.Make<int>("shop", 0x80401618);
         emu.Make<int>("gonkroom", 0x804011A8);
+        emu.MakeString("transition", 16, 0x8022F141);
         return true;
     });
 }
@@ -84,7 +85,7 @@ update {
         current.shop = vars.Helper["shop"].Current;
         current.gonkroom = vars.Helper["gonkroom"].Current;
         current.level = null;
-        current.transition = null;
+        current.transition = vars.Helper["transition"].Current;
     }
 
 
@@ -93,6 +94,7 @@ update {
     if (old.status != current.status) print("status: " + old.status + " -> " + current.status);
     if (old.levelBuffer != current.levelBuffer) print("levelBuffer: " + old.levelBuffer + " -> " + current.levelBuffer);
     if (old.newgame != current.newgame) print("newgame: " + old.newgame + " -> " + current.newgame);
+    if (old.transition != current.transition) print("transition: " + old.transition + " -> " + current.transition);
     if (!vars.isEmu) if (old.endLoad != current.endLoad) print("endLoad: " + old.endLoad + " -> " + current.endLoad);
 
     //if (old.gonkroom != current.gonkroom) print("gonkroom: " + old.gonkroom + " -> " + current.gonkroom);
