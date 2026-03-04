@@ -9,6 +9,7 @@ state("LEGOPirates")
     int roomId: 0xB791B4;
     int redHatCount: 0xB7DBFC;
     int NewGame: 0xA18000;
+    int Minikits: 0xB6B194;
 }
 
 startup {
@@ -20,6 +21,7 @@ startup {
     settings.Add("start_redhat", false, "Start on loading into hub", "redhatrush");
     settings.Add("split_redhat", false, "Split on hub room transitions", "redhatrush");
     settings.Add("split_redhat_end", false, "Split on collecting 20 Red Hats", "redhatrush");
+    settings.Add("split_minikit_IL", false, "Split on collecting the 10th Bottle in a level");
     
 
     //midtros, opening cutscenes, etc that we want to skip on roomsplitting
@@ -74,7 +76,8 @@ split
             (settings["split_room"] && old.roomId == 160 && current.roomId == 161) ||
             (settings["split_room"] && old.roomId == 161 && current.roomId == 162 && vars.count2 == 0) ||
             (settings["split_redhat"] && old.roomTransition && !current.roomTransition) ||
-            (settings["split_redhat_end"] && old.redHatCount == 19 && current.redHatCount == 20);
+            (settings["split_redhat_end"] && old.redHatCount == 19 && current.redHatCount == 20) ||
+            (settings["split_minikit_IL"] && old.Minikits == 9 && current.Minikits == 10);
 }
 
 onSplit {
