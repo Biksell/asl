@@ -25,7 +25,7 @@ startup {
     
 
     //midtros, opening cutscenes, etc that we want to skip on roomsplitting
-    vars.skipRooms = new List<int>() {11,14,21,31,35,36,42,47,52,54,59,60,66,70,74,81,87,96,101,106,107,109,115,120,122,123,124,127,130,132,133,136,142,148,149,153,156,159,57,438,58,93,95,165,19,24,28,37,38,45,51,140,144,146,151,157,161,163,59,64,71,79,85,90,91,99,113,118};
+    vars.skipRooms = new List<int>() {2,11,14,21,31,35,36,42,47,52,54,59,60,66,70,74,81,87,96,101,106,107,109,115,120,122,123,124,127,130,132,133,136,142,148,149,153,156,159,57,438,58,93,95,165,19,24,28,37,38,45,51,140,144,146,151,157,161,163,59,64,71,79,85,90,91,99,113,118};
 
     vars.loadingScreens = new List<int> {2,20,29,39,46,65,72,80,86,87,90,100,108,114,119,144,147,152,158}; // For splitting nocut
     vars.preLoadingScreens = new List<int> {19,28,38,45,58,64,71,79,85,89,95,99,103,107,113,118,132,140,146,151,157,165}; // For splitting nocut
@@ -56,7 +56,7 @@ update {
 start {
     return settings["split_nosave"] && old.NewGame == 0 && current.NewGame == 1 && current.roomId == 439 ||
     settings["start_redhat"] && old.roomId == 439 && current.roomId == 2 ||
-    settings["start_load_level"] && old.roomId == 167 && vars.firstRooms.Contains(current.roomId);
+    settings["start_load_level"] && old.roomId == 146 && vars.firstRooms.Contains(current.roomId);
 }
 
 onStart {
@@ -68,7 +68,7 @@ onStart {
 split
 {
     return (settings["split_save"] && current.head && !old.head) ||
-            (settings["split_nosave"] && old.roomId != current.roomId && vars.loadingScreens.Contains(current.roomId) && vars.preLoadingScreens.Contains(old.roomId)) ||
+            ((settings["split_nosave"] || settings["split_room"]) && old.roomId != current.roomId && vars.loadingScreens.Contains(current.roomId) && vars.preLoadingScreens.Contains(old.roomId)) ||
             (settings["split_room"] && old.roomId != current.roomId && !vars.exceptionRooms.Contains(current.roomId) && !vars.skipRooms.Contains(current.roomId) && old.roomId != 161 && current.roomId != 161) ||
             (settings["split_room"] && old.roomId == 32 && current.roomId == 31 && !vars.splitRooms.Contains(current.roomId))||
             (settings["split_room"] && old.roomId == 75 && current.roomId == 74 && !vars.splitRooms.Contains(current.roomId))||
