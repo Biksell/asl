@@ -30,7 +30,7 @@ startup {
     vars.loadingScreens = new List<int> {2,20,29,39,46,65,72,80,86,87,90,100,108,114,119,144,147,152,158}; // For splitting nocut
     vars.preLoadingScreens = new List<int> {19,28,38,45,58,64,71,79,85,89,95,99,103,107,113,118,132,140,146,151,157,165}; // For splitting nocut
 
-    vars.firstRooms = new List<int> {14,21,31,39,47,60,66,74,81,87,96,101,109,115,120,133,141,148,153,158};
+    vars.firstRooms = new List<int> {11,14,20,21,29,31,39,46,47,60,65,66,72,74,80,81,86,87,92,96,100,101,108,109,114,115,119,120,128,133,142,144,147,148,152,153,158,164};
 
     vars.exceptionRooms = new List<int>() {144}; //144 only split first time, 31 and 74 split on the second time
 
@@ -56,7 +56,7 @@ update {
 start {
     return settings["split_nosave"] && old.NewGame == 0 && current.NewGame == 1 && current.roomId == 439 ||
     settings["start_redhat"] && old.roomId == 439 && current.roomId == 2 ||
-    settings["start_load_level"] && old.roomId == 146 && vars.firstRooms.Contains(current.roomId);
+    settings["start_load_level"] && (old.roomId == 146 || old.roomId == 140) && vars.firstRooms.Contains(current.roomId);
 }
 
 onStart {
